@@ -14,3 +14,7 @@ litellmtest.py
 .env 
 archive 
 .DS_Store
+
+db/
+*.sqlite3
+*.bin
