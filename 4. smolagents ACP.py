@@ -1,8 +1,13 @@
 from collections.abc import AsyncGenerator
+
 from acp_sdk.models import Message, MessagePart
 from acp_sdk.server import Context, RunYield, RunYieldResume, Server
-from smolagents import ToolCallingAgent, ToolCollection, CodeAgent, DuckDuckGoSearchTool, LiteLLMModel, VisitWebpageTool
-import logging 
+from smolagents import (
+    CodeAgent,
+    DuckDuckGoSearchTool,
+    LiteLLMModel,
+    VisitWebpageTool,
+)
 
 server = Server()
 
@@ -13,9 +18,12 @@ model = LiteLLMModel(
     num_ctx=8192,
 )
 
+
 @server.agent()
-async def health_agent(input: list[Message], context: Context) -> AsyncGenerator[RunYield, RunYieldResume]:
-    "This is a CodeAgent which supports the hospital to handle health based questions for patients. Current or prospective patients can use it to find answers about their health and hospital treatments."
+async def health_agent(
+    input: list[Message], context: Context
+) -> AsyncGenerator[RunYield, RunYieldResume]:
+    """This is a CodeAgent which supports the hospital to handle health based questions for patients. Current or prospective patients can use it to find answers about their health and hospital treatments."""
     agent = CodeAgent(tools=[DuckDuckGoSearchTool(), VisitWebpageTool()], model=model)
 
     prompt = input[0].parts[0].content

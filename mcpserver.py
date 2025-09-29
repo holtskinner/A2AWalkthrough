@@ -8,8 +8,7 @@ mcp = FastMCP("doctorserver")
 
 @mcp.tool()
 def list_doctors(state: str) -> str:
-    """
-    This tool returns a list of doctors practicing in a specific state. The search is case-insensitive.
+    """This tool returns a list of doctors practicing in a specific state. The search is case-insensitive.
 
     Args:
         state: The two-letter state code (e.g., "CA" for California).
