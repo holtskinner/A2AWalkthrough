@@ -5,16 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "acp-sdk==0.7.3",
-    "colorama>=0.4.6",
-    "crewai[tools]",
-    "langchain>=0.3.23",
-    "langchain-litellm>=0.1.4",
-    "langchain-ollama>=0.3.2",
+    "google-genai",
+    "google-adk",
+    "a2a-sdk[http-server]>=0.3.0",
     "mcp>=1.7.1",
     "pydantic>=2.11.4",
     "shutup>=0.2.0",
     "smolagents[litellm,mcp,toolkit]>=1.14.0,<1.19.0",
     "yfinance>=0.2.58",
-    "google-generativeai"
 ]

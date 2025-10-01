@@ -23,3 +23,5 @@ archive
 db/
 *.sqlite3
 *.bin
+
+originals/
