@@ -13,4 +13,5 @@ dependencies = [
     "shutup>=0.2.0",
     "smolagents[litellm,mcp,toolkit]>=1.14.0,<1.19.0",
     "yfinance>=0.2.58",
+    "rich",
 ]
