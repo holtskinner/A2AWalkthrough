@@ -12,38 +12,27 @@ from google.adk.tools import google_search
 from google.genai import types
 
 
-async def call_agent_async(query: str, runner, user_id, session_id):
-    """Sends a query to the agent and prints the final response."""
-    print(f"\n>>> User Query: {query}")
+async def call_agent_async(agent, query):
+    APP_NAME = "health_app"
+    USER_ID = "user_1"
+    SESSION_ID = "session_001"  # Using a fixed ID for simplicity
 
-    # Prepare the user's message in ADK format
     content = types.Content(role="user", parts=[types.Part(text=query)])
 
-    final_response_text = "Agent did not produce a final response."  # Default
+    session_service = InMemorySessionService()
+    session = await session_service.create_session(
+        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
+    )
+    runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
 
-    # Key Concept: run_async executes the agent logic and yields Events.
-    # We iterate through events to find the final answer.
-    async for event in runner.run_async(
-        user_id=user_id, session_id=session_id, new_message=content
-    ):
-        # You can uncomment the line below to see *all* events during execution
-        # print(f"  [Event] Author: {event.author}, Type: {type(event).__name__}, Final: {event.is_final_response()}, Content: {event.content}")
+    events = runner.run_async(
+        user_id=USER_ID, session_id=SESSION_ID, new_message=content
+    )
 
-        # Key Concept: is_final_response() marks the concluding message for the turn.
+    async for event in events:
         if event.is_final_response():
-            if event.content and event.content.parts:
-                # Assuming text response in the first part
-                final_response_text = event.content.parts[0].text
-            elif (
-                event.actions and event.actions.escalate
-            ):  # Handle potential errors/escalations
-                final_response_text = (
-                    f"Agent escalated: {event.error_message or 'No specific message.'}"
-                )
-            # Add more checks here if needed (e.g., specific error codes)
-            break  # Stop processing events once the final response is found
-
-    print(f"<<< Agent Response: {final_response_text}")
+            final_response = event.content.parts[0].text
+            print("Agent Response: ", final_response)
 
 
 async def run_hospital_workflow() -> None:
@@ -93,7 +82,7 @@ async def run_hospital_workflow() -> None:
         name="health_agent",
         tools=[google_search],
         description="Provides information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
-        instruction="You are a health agent tasked with providing information about seeking treatments. Use the google_search tool to find information on the web.",
+        instruction="You are a health agent tasked with providing information about seeking treatments. Use the google_search tool to find information on the web about options.",
     )
 
     root_agent = LlmAgent(
@@ -106,34 +95,9 @@ async def run_hospital_workflow() -> None:
         sub_agents=[health_agent, policy_agent],
     )
 
-    session_service = InMemorySessionService()
-
-    APP_NAME = "health_app"
-    USER_ID = "user_1"
-    SESSION_ID = "session_001"  # Using a fixed ID for simplicity
-
-    # Create the specific session where the conversation will happen
-    session = await session_service.create_session(
-        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
-    )
-    print(
-        f"Session created: App='{APP_NAME}', User='{USER_ID}', Session='{SESSION_ID}'"
-    )
-
-    # --- Runner ---
-    # Key Concept: Runner orchestrates the agent execution loop.
-    runner = Runner(
-        agent=root_agent,  # The agent we want to run
-        app_name=APP_NAME,  # Associates runs with our app
-        session_service=session_service,  # Uses our session manager
-    )
-    print(f"Runner created for agent '{runner.agent.name}'.")
-
     await call_agent_async(
-        "How do I find a mental health therapist and what does my insurance cover?",
-        runner=runner,
-        user_id=USER_ID,
-        session_id=SESSION_ID,
+        root_agent,
+        "How do I get mental health therapy and what does my insurance cover?",
     )
 
 
