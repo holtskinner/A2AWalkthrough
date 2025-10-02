@@ -8,6 +8,7 @@ from google.adk.agents.remote_a2a_agent import (
 )
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
+from google.adk.tools import google_search
 from google.genai import types
 
 
@@ -47,15 +48,52 @@ async def call_agent_async(query: str, runner, user_id, session_id):
 
 async def run_hospital_workflow() -> None:
 
-    policy_agent = RemoteA2aAgent(
+    # policy_agent = RemoteA2aAgent(
+    #     name="policy_agent",
+    #     agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
+    #     description="Provides information about insurance coverage options and details.",
+    # )
+    # health_agent = RemoteA2aAgent(
+    #     name="health_agent",
+    #     agent_card=f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}",
+    #     description="Provides information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
+    # )
+
+    policy_agent = LlmAgent(
+        model="gemini-2.0-flash",
         name="policy_agent",
-        agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
         description="Provides information about insurance coverage options and details.",
+        instruction="""
+        "You are an expert insurance agent designed to assist with coverage queries. Use the provided documents to answer questions about insurance policies. If the information is not available in the documents, respond with 'I don't know'"
+        Here's the information about mental health coverage from the provided document:
+
+        **Section:** If you need mental health, behavioral health, or substance abuse services
+
+        **What You Will Pay:**
+
+        *   **In-Network Provider (You will pay the least):**
+            *   Office Visit: 10% coinsurance
+            *   Other Outpatient: 10% coinsurance
+            *   Inpatient services: 10% coinsurance
+        *   **Out-of-Network Provider (You will pay the most):**
+            *   Office Visit: 30% coinsurance
+            *   Other Outpatient: 30% coinsurance
+            *   Inpatient services: 30% coinsurance
+
+        **Limitations, Exceptions, & Other Important Information:**
+
+        *   **For Inpatient Physician Fees:**
+            *   In-Network Providers: 10% coinsurance
+            *   Out-of-Network Providers: 30% coinsurance
+        """,
     )
-    health_agent = RemoteA2aAgent(
+
+    health_agent = LlmAgent(
+        model="gemini-2.0-flash",
         name="health_agent",
-        agent_card=f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}",
+        tools=[google_search],
         description="Provides information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
+        instruction="You are a health agent tasked with providing information about seeking treatments. Use the google_search tool to find information on the web.",
     )
 
     root_agent = LlmAgent(
