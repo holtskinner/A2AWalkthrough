@@ -26,7 +26,7 @@ class HealthAgentExecutor(AgentExecutor):
         load_dotenv()
 
         model = LiteLLMModel(
-            model_id="gemini/gemini-2.5-pro",
+            model_id="gemini/gemini-2.5-flash",
             num_ctx=8192,
         )
         self.agent = CodeAgent(
