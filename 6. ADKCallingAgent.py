@@ -1,8 +1,7 @@
 # Import the implementation from the file
 import asyncio
 
-from google.adk.agents import Agent
-from google.adk.agents.llm_agent import Agent
+from google.adk.agents import LlmAgent
 from google.adk.agents.remote_a2a_agent import (
     AGENT_CARD_WELL_KNOWN_PATH,
     RemoteA2aAgent,
@@ -50,20 +49,23 @@ async def run_hospital_workflow() -> None:
 
     policy_agent = RemoteA2aAgent(
         name="policy_agent",
-        agent_card=(f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}"),
+        agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
+        description="Provides information about insurance coverage options and details.",
     )
     health_agent = RemoteA2aAgent(
         name="health_agent",
-        agent_card=(f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}"),
+        agent_card=f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}",
+        description="Provides information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
     )
 
-    root_agent = Agent(
-        model="gemini-2.5-flash-lite",
+    root_agent = LlmAgent(
+        model="gemini-2.0-flash",
         name="root_agent",
+        description="Healthcare Routing Agent",
         instruction="""
         You are an agent for healthcare services. Your task is to call on one or more sub-agents to answer questions and provide a detailed summary of their answers. Use `health_agent` for general healthcare questions and `policy_agent` for questions on Health Insurance Policies.
         """,
-        sub_agents=[policy_agent, health_agent],
+        sub_agents=[health_agent, policy_agent],
     )
 
     session_service = InMemorySessionService()
@@ -90,7 +92,7 @@ async def run_hospital_workflow() -> None:
     print(f"Runner created for agent '{runner.agent.name}'.")
 
     await call_agent_async(
-        "what does my insurance cover for mental health therapy and how do I find a therapist?",
+        "How do I find a mental health therapist and what does my insurance cover?",
         runner=runner,
         user_id=USER_ID,
         session_id=SESSION_ID,
