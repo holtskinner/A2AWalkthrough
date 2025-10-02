@@ -9,11 +9,15 @@ with open("data/gold-hospital-and-premium-extras.pdf", "rb") as f:
 
 client = genai.Client()
 
+with open("./data/2026AnthemgHIPSBC.pdf", "rb") as file:
+    pdf_bytes = file.read()
+
 response = client.models.generate_content(
     model="gemini-2.5-flash-lite",
     contents=[
-        Part.from_uri(
-            file_uri="https://mybenefits.wageworks.com/media/docs/CXWW/39068/Google%20IH%20GHIP%20SBC%20Final.pdf"
+        Part.from_bytes(
+            data=pdf_bytes,
+            mime_type="application/pdf",
         ),
         "How much would I pay for mental health therapy?",
     ],
