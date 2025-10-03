@@ -23,10 +23,8 @@ class HealthAgentExecutor(AgentExecutor):
     """This is a CodeAgent which supports the hospital to handle health based questions for patients. Current or prospective patients can use it to find answers about their health and hospital treatments."""
 
     def __init__(self):
-        load_dotenv()
-
         model = LiteLLMModel(
-            model_id="gemini/gemini-2.5-flash",
+            model_id="gemini/gemini-2.5-pro",
             num_ctx=8192,
         )
         self.agent = CodeAgent(
@@ -48,6 +46,8 @@ class HealthAgentExecutor(AgentExecutor):
 if __name__ == "__main__":
     PORT = 9998
     HOST = "0.0.0.0"
+
+    load_dotenv()
 
     skill = AgentSkill(
         id="general_health_inquiry",
