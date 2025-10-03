@@ -7,11 +7,14 @@ requires-python = ">=3.12"
 dependencies = [
     "google-cloud-aiplatform",
     "anthropic[vertex]",
-    "google-genai",
     "google-adk[a2a]",
     "a2a-sdk[http-server]>=0.3.0",
     "mcp>=1.7.1",
-    "smolagents[litellm,mcp,toolkit]>=1.14.0,<1.19.0",
+    "agent-framework==1.0.0b251001",
+    "agent-framework-a2a==1.0.0b251001",
+    "azure-ai-agents==1.2.0b5",
+    "agent-framework-azure-ai==1.0.0b251001",
+    "google-auth",
     "rich",
 ]
 
