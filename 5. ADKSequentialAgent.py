@@ -1,22 +1,20 @@
-# Import the implementation from the file
 import asyncio
 import warnings
 
 from dotenv import load_dotenv
-from google.adk.agents import LlmAgent, SequentialAgent
+from google.adk.agents import BaseAgent, SequentialAgent
 from google.adk.agents.remote_a2a_agent import (
     AGENT_CARD_WELL_KNOWN_PATH,
     RemoteA2aAgent,
 )
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
-from google.adk.tools.agent_tool import AgentTool
 from google.genai import types
 
 warnings.filterwarnings("ignore")
 
 
-async def call_agent_async(agent, query):
+async def call_agent_async(agent: BaseAgent, query: str) -> None:
     APP_NAME = "health_app"
     USER_ID = "user_1"
     SESSION_ID = "session_001"  # Using a fixed ID for simplicity
