@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "google-genai",
-    "google-adk",
+    "google-adk[a2a]",
     "a2a-sdk[http-server]>=0.3.0",
     "mcp>=1.7.1",
     "pydantic>=2.11.4",

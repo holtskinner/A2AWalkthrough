@@ -1,6 +1,8 @@
 # Import the implementation from the file
 import asyncio
+import warnings
 
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.agents.remote_a2a_agent import (
     AGENT_CARD_WELL_KNOWN_PATH,
@@ -9,7 +11,10 @@ from google.adk.agents.remote_a2a_agent import (
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.adk.tools import google_search
+from google.adk.tools.agent_tool import AgentTool
 from google.genai import types
+
+warnings.filterwarnings("ignore")
 
 
 async def call_agent_async(agent, query):
@@ -37,52 +42,13 @@ async def call_agent_async(agent, query):
 
 async def run_hospital_workflow() -> None:
 
-    # policy_agent = RemoteA2aAgent(
-    #     name="policy_agent",
-    #     agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
-    #     description="Provides information about insurance coverage options and details.",
-    # )
-    # health_agent = RemoteA2aAgent(
-    #     name="health_agent",
-    #     agent_card=f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}",
-    #     description="Provides information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
-    # )
-
-    policy_agent = LlmAgent(
-        model="gemini-2.0-flash",
+    policy_agent = RemoteA2aAgent(
         name="policy_agent",
-        description="Provides information about insurance coverage options and details.",
-        instruction="""
-        "You are an expert insurance agent designed to assist with coverage queries. Use the provided documents to answer questions about insurance policies. If the information is not available in the documents, respond with 'I don't know'"
-        Here's the information about mental health coverage from the provided document:
-
-        **Section:** If you need mental health, behavioral health, or substance abuse services
-
-        **What You Will Pay:**
-
-        *   **In-Network Provider (You will pay the least):**
-            *   Office Visit: 10% coinsurance
-            *   Other Outpatient: 10% coinsurance
-            *   Inpatient services: 10% coinsurance
-        *   **Out-of-Network Provider (You will pay the most):**
-            *   Office Visit: 30% coinsurance
-            *   Other Outpatient: 30% coinsurance
-            *   Inpatient services: 30% coinsurance
-
-        **Limitations, Exceptions, & Other Important Information:**
-
-        *   **For Inpatient Physician Fees:**
-            *   In-Network Providers: 10% coinsurance
-            *   Out-of-Network Providers: 30% coinsurance
-        """,
+        agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
     )
-
-    health_agent = LlmAgent(
-        model="gemini-2.0-flash",
+    health_agent = RemoteA2aAgent(
         name="health_agent",
-        tools=[google_search],
-        description="Provides information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
-        instruction="You are a health agent tasked with providing information about seeking treatments. Use the google_search tool to find information on the web about options.",
+        agent_card=f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}",
     )
 
     root_agent = LlmAgent(
@@ -90,9 +56,16 @@ async def run_hospital_workflow() -> None:
         name="root_agent",
         description="Healthcare Routing Agent",
         instruction="""
-        You are an agent for healthcare services. Your task is to call on one or more sub-agents to answer questions and provide a detailed summary of their answers. Use `health_agent` for general healthcare questions and `policy_agent` for questions on Health Insurance Policies.
+        You are an agent for healthcare services. Your task is to call on one or more agent tools to answer questions and provide a detailed summary of their answers. Use `health_agent` for general healthcare questions, including finding providers and `policy_agent` for questions on Health Insurance Policies. In your output, put which agent gave you the information.
         """,
-        sub_agents=[health_agent, policy_agent],
+        tools=[
+            AgentTool(
+                agent=health_agent,
+            ),
+            AgentTool(
+                agent=policy_agent,
+            ),
+        ],
     )
 
     await call_agent_async(
@@ -102,4 +75,5 @@ async def run_hospital_workflow() -> None:
 
 
 if __name__ == "__main__":
+    load_dotenv()
     asyncio.run(run_hospital_workflow())
