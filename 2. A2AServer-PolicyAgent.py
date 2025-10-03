@@ -75,7 +75,7 @@ class InsuranceAgentExecutor(AgentExecutor):
 
 if __name__ == "__main__":
     PORT = 9999
-    HOST = "0.0.0.0"
+    HOST = "localhost"
 
     skill = AgentSkill(
         id="insurance_coverage",

@@ -15,7 +15,7 @@ from rich.markdown import Markdown
 
 
 async def main() -> None:
-    base_url = "http://0.0.0.0:9999"
+    base_url = "http://localhost:9999"
 
     prompt = "How much would I pay for mental health therapy?"
 

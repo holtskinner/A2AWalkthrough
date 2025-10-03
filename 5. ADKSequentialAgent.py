@@ -22,7 +22,7 @@ async def call_agent_async(agent: BaseAgent, query: str) -> None:
     content = types.Content(role="user", parts=[types.Part(text=query)])
 
     session_service = InMemorySessionService()
-    session = await session_service.create_session(
+    _ = await session_service.create_session(
         app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
     )
     runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
@@ -42,11 +42,11 @@ async def run_hospital_workflow() -> None:
 
     policy_agent = RemoteA2aAgent(
         name="policy_agent",
-        agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://localhost:9999{AGENT_CARD_WELL_KNOWN_PATH}",
     )
     health_research_agent = RemoteA2aAgent(
         name="health_agent",
-        agent_card=f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://localhost:9998{AGENT_CARD_WELL_KNOWN_PATH}",
     )
 
     root_agent = SequentialAgent(
