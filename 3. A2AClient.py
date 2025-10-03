@@ -21,7 +21,7 @@ async def main() -> None:
 
     console = Console()
 
-    async with httpx.AsyncClient(timeout=10.0) as httpx_client:
+    async with httpx.AsyncClient(timeout=100.0) as httpx_client:
         client = JsonRpcTransport(
             httpx_client=httpx_client,
             url=base_url,
@@ -35,12 +35,19 @@ async def main() -> None:
             )
         )
 
-        response: Message = await client.send_message(request)
+        response = await client.send_message(request)
 
-        message_id = response.message_id
-        text_content = response.parts[0].root.text
+        if response.kind == "message":
+            message_id = response.message_id
+            text_content = response.parts[0].root.text
 
-        console.print(f"[yellow]Message ID:[/] {message_id}")
+            console.print(f"[yellow]Message ID:[/] {message_id}")
+        else:
+            artifact_id = response.artifacts[0].artifact_id
+            text_content = response.artifacts[0].parts[0].root.text
+
+            console.print(f"[yellow]Artifact ID:[/] {artifact_id}")
+
         console.print(Markdown(text_content))
 
 
