@@ -17,7 +17,7 @@ def list_doctors(state: str) -> str:
         A JSON string representing a list of doctors found in that state.
         Example: '[{"name": "Dr John James", "specialty": "Cardiology", ...}]'
     """
-    url = "https://raw.githubusercontent.com/holtskinner/A2AWalkthrough/refs/heads/main/doctors.json"
+    url = "https://raw.githubusercontent.com/holtskinner/A2AWalkthrough/refs/heads/main/data/doctors.json"
 
     doctors = requests.get(url, timeout=10).json()
     state = state.upper()
