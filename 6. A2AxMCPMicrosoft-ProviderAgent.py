@@ -1,5 +1,3 @@
-import asyncio
-import base64
 import os
 
 import google.auth
