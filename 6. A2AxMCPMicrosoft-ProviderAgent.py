@@ -59,7 +59,7 @@ class ProviderAgentExecutor(AgentExecutor):
         event_queue: EventQueue,
     ) -> None:
         result = await self.agent.run(
-            "I'm based in Boston, MA. Are there any Psychiatrists near me?",
+            context.get_user_input(),
             tools=self.mcp_server,
         )
 
