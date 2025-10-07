@@ -15,6 +15,7 @@ dependencies = [
     "pydantic-ai-slim[openai,vertexai,a2a]",
     "google-auth",
     "rich",
+    "fasta2a>=0.6.0",
 ]
 
 [tool.ruff]
