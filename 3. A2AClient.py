@@ -2,10 +2,11 @@ import asyncio
 from uuid import uuid4
 
 import httpx
+from a2a.client.card_resolver import A2ACardResolver
+from a2a.client.client_factory import ClientConfig, ClientFactory
 from a2a.client.transports.jsonrpc import JsonRpcTransport
 from a2a.types import (
     Message,
-    MessageSendParams,
     Part,
     Role,
     TaskQueryParams,
@@ -45,33 +46,36 @@ async def main() -> None:
     console = Console()
 
     async with httpx.AsyncClient(timeout=100.0) as httpx_client:
-        client = JsonRpcTransport(
-            httpx_client=httpx_client,
-            url=base_url,
+        # Get Agent Card
+        card_resolver = A2ACardResolver(httpx_client=httpx_client, base_url=base_url)
+        agent_card = await card_resolver.get_agent_card()
+        print(agent_card)
+
+        client = ClientFactory(
+            config=ClientConfig(polling=True, httpx_client=httpx_client)
+        ).create(agent_card)
+
+        message = Message(
+            message_id=uuid4().hex,
+            role=Role.user,
+            parts=[Part(TextPart(text=prompt))],
         )
 
-        request = MessageSendParams(
-            message=Message(
-                message_id=uuid4().hex,
-                role=Role.user,
-                parts=[Part(TextPart(text=prompt))],
-            )
-        )
+        responses = client.send_message(message)
 
-        response = await client.send_message(request)
+        async for response in responses:
+            if response.kind == "message":
+                message_id = response.message_id
+                text_content = response.parts[0].root.text
 
-        if response.kind == "message":
-            message_id = response.message_id
-            text_content = response.parts[0].root.text
+                console.print(f"[yellow]Message ID:[/] {message_id}")
+            elif response.kind == "artifact":
+                artifact_id = response.artifacts[0].artifact_id
+                text_content = response.artifacts[0].parts[0].root.text
 
-            console.print(f"[yellow]Message ID:[/] {message_id}")
-        elif response.kind == "artifact":
-            artifact_id = response.artifacts[0].artifact_id
-            text_content = response.artifacts[0].parts[0].root.text
-
-            console.print(f"[yellow]Artifact ID:[/] {artifact_id}")
-        elif response.kind == "task":
-            text_content = await poll_task(client, response.id)
+                console.print(f"[yellow]Artifact ID:[/] {artifact_id}")
+            elif response.kind == "task":
+                text_content = await poll_task(client, response.id)
 
         console.print(Markdown(text_content))
 
