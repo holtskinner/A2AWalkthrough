@@ -12,10 +12,10 @@ dependencies = [
     "mcp>=1.7.1",
     "agent-framework==1.0.0b251001",
     "agent-framework-a2a==1.0.0b251001",
-    "azure-ai-agents==1.2.0b5",
-    "agent-framework-azure-ai==1.0.0b251001",
+    "pydantic-ai-slim[openai,vertexai,a2a]",
     "google-auth",
     "rich",
+    "fasta2a>=0.6.0",
 ]
 
 [tool.ruff]
