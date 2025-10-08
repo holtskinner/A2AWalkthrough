@@ -1,5 +1,6 @@
 import base64
 import os
+from pathlib import Path
 
 import uvicorn
 from a2a.server.agent_execution import AgentExecutor, RequestContext
@@ -32,7 +33,7 @@ class InsuranceAgentExecutor(AgentExecutor):
             project_id=os.environ.get("GOOGLE_CLOUD_PROJECT"),
             region="us-east5",
         )
-        with open("./data/2026AnthemgHIPSBC.pdf", "rb") as file:
+        with Path("./data/2026AnthemgHIPSBC.pdf").open("rb") as file:
             self.pdf_data = base64.standard_b64encode(file.read()).decode("utf-8")
 
     async def execute(
@@ -92,7 +93,7 @@ if __name__ == "__main__":
         version="1.0.0",
         default_input_modes=["text"],
         default_output_modes=["text"],
-        capabilities=AgentCapabilities(streaming=True),
+        capabilities=AgentCapabilities(streaming=False),
         skills=[skill],
     )
 
