@@ -16,6 +16,7 @@ dependencies = [
     "google-auth",
     "rich",
     "fasta2a>=0.6.0",
+    "beeai-framework[a2a]",
 ]
 
 [tool.ruff]

@@ -16,7 +16,7 @@ from google.genai import types
 warnings.filterwarnings("ignore")
 
 
-async def call_agent_async(agent, query):
+async def call_agent_async(agent, query) -> None:
     APP_NAME = "health_app"
     USER_ID = "user_1"
     SESSION_ID = "session_001"  # Using a fixed ID for simplicity
@@ -24,7 +24,7 @@ async def call_agent_async(agent, query):
     content = types.Content(role="user", parts=[types.Part(text=query)])
 
     session_service = InMemorySessionService()
-    session = await session_service.create_session(
+    await session_service.create_session(
         app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
     )
     runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
@@ -40,7 +40,6 @@ async def call_agent_async(agent, query):
 
 
 async def run_hospital_workflow() -> None:
-
     policy_agent = RemoteA2aAgent(
         name="policy_agent",
         agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
