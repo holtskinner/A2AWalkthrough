@@ -54,8 +54,10 @@ class ProviderAgentExecutor(AgentExecutor):
         context: RequestContext,
         event_queue: EventQueue,
     ) -> None:
+        prompt = context.get_user_input()
+        print(prompt)
         result = await self.agent.run(
-            context.get_user_input(),
+            prompt,
             tools=self.mcp_server,
         )
 

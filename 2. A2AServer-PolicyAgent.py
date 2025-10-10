@@ -41,6 +41,8 @@ class InsuranceAgentExecutor(AgentExecutor):
         context: RequestContext,
         event_queue: EventQueue,
     ) -> None:
+        prompt = context.get_user_input()
+        print(prompt)
         response = self.client.messages.create(
             model="claude-3-5-haiku@20241022",
             max_tokens=1024,
@@ -59,7 +61,7 @@ class InsuranceAgentExecutor(AgentExecutor):
                         ),
                         TextBlockParam(
                             type="text",
-                            text=context.get_user_input(),
+                            text=prompt,
                         ),
                     ],
                 )
