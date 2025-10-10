@@ -1,5 +1,6 @@
 # Import the implementation from the file
 import asyncio
+import os
 import warnings
 
 from dotenv import load_dotenv
@@ -16,7 +17,7 @@ from google.genai import types
 warnings.filterwarnings("ignore")
 
 
-async def call_agent_async(agent, query):
+async def call_agent_async(agent, query) -> None:
     APP_NAME = "health_app"
     USER_ID = "user_1"
     SESSION_ID = "session_001"  # Using a fixed ID for simplicity
@@ -40,18 +41,23 @@ async def call_agent_async(agent, query):
 
 
 async def run_hospital_workflow() -> None:
+    load_dotenv()
+    host = os.environ.get("AGENT_HOST", "localhost")
+    policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
+    research_port = os.environ.get("RESEARCH_AGENT_PORT", 9998)
+    provider_port = os.environ.get("PROVIDER_AGENT_PORT", 8001)
 
     policy_agent = RemoteA2aAgent(
         name="policy_agent",
-        agent_card=f"http://0.0.0.0:9999{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{policy_port}{AGENT_CARD_WELL_KNOWN_PATH}",
     )
     health_agent = RemoteA2aAgent(
         name="health_agent",
-        agent_card=f"http://0.0.0.0:9998{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{research_port}{AGENT_CARD_WELL_KNOWN_PATH}",
     )
     providers_agent = RemoteA2aAgent(
         name="providers_agent",
-        agent_card=f"http://0.0.0.0:8001{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{provider_port}{AGENT_CARD_WELL_KNOWN_PATH}",
     )
 
     root_agent = LlmAgent(
@@ -81,5 +87,4 @@ async def run_hospital_workflow() -> None:
 
 
 if __name__ == "__main__":
-    load_dotenv()
     asyncio.run(run_hospital_workflow())

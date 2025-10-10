@@ -24,8 +24,6 @@ class ProviderAgentExecutor(AgentExecutor):
     """Example using a local MCP server via stdio."""
 
     def __init__(self) -> None:
-        load_dotenv()
-
         project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
         location = "global"
         base_url = f"https://aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/endpoints/openapi"
@@ -71,8 +69,9 @@ class ProviderAgentExecutor(AgentExecutor):
 
 
 if __name__ == "__main__":
-    HOST = "localhost"
-    PORT = 8001
+    load_dotenv()
+    HOST = os.environ.get("AGENT_HOST", "localhost")
+    PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 8001))
 
     skill = AgentSkill(
         id="find_healthcare_providers",

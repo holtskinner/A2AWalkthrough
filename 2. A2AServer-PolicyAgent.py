@@ -75,8 +75,9 @@ class InsuranceAgentExecutor(AgentExecutor):
 
 
 if __name__ == "__main__":
-    PORT = 9999
-    HOST = "localhost"
+    load_dotenv()
+    PORT = int(os.environ.get("POLICY_AGENT_PORT", 9999))
+    HOST = os.environ.get("AGENT_HOST", "localhost")
 
     skill = AgentSkill(
         id="insurance_coverage",

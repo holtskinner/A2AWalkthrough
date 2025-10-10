@@ -1,4 +1,5 @@
 import asyncio
+import os
 import warnings
 
 from dotenv import load_dotenv
@@ -38,15 +39,21 @@ async def call_agent_async(agent: BaseAgent, query: str) -> None:
 
 
 async def run_hospital_workflow() -> None:
+    load_dotenv()
+
+    host = os.environ.get("AGENT_HOST", "localhost")
+    policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
+    research_port = os.environ.get("RESEARCH_AGENT_PORT", 9998)
+
     prompt = "How can I get mental health therapy?"
 
     policy_agent = RemoteA2aAgent(
         name="policy_agent",
-        agent_card=f"http://localhost:9999{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{policy_port}{AGENT_CARD_WELL_KNOWN_PATH}",
     )
     health_research_agent = RemoteA2aAgent(
-        name="health_agent",
-        agent_card=f"http://localhost:9998{AGENT_CARD_WELL_KNOWN_PATH}",
+        name="health_research_agent",
+        agent_card=f"http://{host}:{research_port}{AGENT_CARD_WELL_KNOWN_PATH}",
     )
 
     root_agent = SequentialAgent(
@@ -64,5 +71,4 @@ async def run_hospital_workflow() -> None:
 
 
 if __name__ == "__main__":
-    load_dotenv()
     asyncio.run(run_hospital_workflow())
