@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     agent_card = AgentCard(
         name="HealthcareProviderFinderAgent",
-        description="An agent that can find and list healthcare providers based on a user's location (state) and desired specialty.",
+        description="An agent that can find and list healthcare providers based on a user's location and desired specialty.",
         url=f"http://{HOST}:{PORT}/",
         version="1.0.0",
         default_input_modes=["text"],
