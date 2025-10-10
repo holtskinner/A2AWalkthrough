@@ -1,3 +1,4 @@
+import os
 import warnings
 
 import uvicorn
@@ -10,8 +11,8 @@ warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
     load_dotenv()
-    PORT = 9998
-    HOST = "localhost"
+    PORT = int(os.environ.get("RESEARCH_AGENT_PORT", 9998))
+    HOST = os.environ.get("AGENT_HOST", "localhost")
 
     root_agent = LlmAgent(
         model="gemini-2.5-pro",

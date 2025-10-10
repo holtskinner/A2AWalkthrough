@@ -1,13 +1,19 @@
 import asyncio
+import os
 
 from agent_framework.a2a import A2AAgent
+from dotenv import load_dotenv
 from rich.console import Console
 from rich.markdown import Markdown
 
 
 async def main() -> None:
+    load_dotenv()
+    host = os.environ.get("AGENT_HOST", "localhost")
+    port = os.environ.get("PROVIDER_AGENT_PORT", 8001)
+    base_url = f"http://{host}:{port}"
+
     console = Console()
-    base_url = "http://localhost:8001"
 
     # Create A2A agent with direct URL configuration
     healthcare_provider_agent = A2AAgent(

@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 import httpx
 from a2a.client import (
@@ -14,6 +15,7 @@ from a2a.types import (
     TaskQueryParams,
 )
 from a2a.utils.message import get_message_text
+from dotenv import load_dotenv
 from rich.console import Console, Group
 from rich.markdown import Markdown
 from rich.panel import Panel
@@ -80,7 +82,12 @@ async def poll_task(client: Client, task_id: str) -> str | None:
 
 
 async def main() -> None:
-    base_url = "http://localhost:9999"
+    load_dotenv()
+
+    host = os.environ.get("AGENT_HOST", "localhost")
+    port = os.environ.get("POLICY_AGENT_PORT", 9999)
+    base_url = f"http://{host}:{port}"
+
     prompt = "How much would I pay for mental health therapy?"
     console = Console()
 
