@@ -8,6 +8,7 @@ from beeai_framework.emitter import EventMeta
 from beeai_framework.errors import FrameworkError
 from beeai_framework.memory.unconstrained_memory import UnconstrainedMemory
 from beeai_framework.utils.models import ModelLike, to_model_optional
+from dotenv import load_dotenv
 from termcolor import colored
 
 from pydantic import BaseModel
@@ -67,7 +68,11 @@ class ConsoleReader:
 async def main() -> None:
     reader = ConsoleReader()
 
-    agent = A2AAgent(url="http://127.0.0.1:9999", memory=UnconstrainedMemory())
+    load_dotenv()
+    host = os.environ.get("AGENT_HOST", "localhost")
+    healthcare_agent_port = os.environ.get("HEALTHCARE_AGENT_PORT", 9997)
+
+    agent = A2AAgent(url=f"http://{host}:{healthcare_agent_port}", memory=UnconstrainedMemory())
     for prompt in reader:
         # Run the agent and observe events
         def print_update(data: A2AAgentUpdateEvent, event: EventMeta) -> None:
