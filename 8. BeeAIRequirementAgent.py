@@ -1,4 +1,5 @@
 import asyncio
+import os
 import sys
 import traceback
 
@@ -13,7 +14,6 @@ from beeai_framework.agents.requirement.requirements.ask_permission import (
 from beeai_framework.agents.requirement.requirements.conditional import (
     ConditionalRequirement,
 )
-from beeai_framework.backend import ChatModel
 from beeai_framework.emitter import EventMeta
 from beeai_framework.errors import FrameworkError
 from beeai_framework.memory import UnconstrainedMemory
@@ -25,24 +25,41 @@ from beeai_framework.tools.think import ThinkTool
 from dotenv import load_dotenv
 
 
+def print_update(data: A2AAgentUpdateEvent, event: EventMeta) -> None:
+    value = data.value
+    debug_info = value[1] if isinstance(value, tuple) else value
+    print("Agent 🤖 (debug) : ", str(debug_info))
+
+
 async def main() -> None:
     load_dotenv()
+    host = os.environ.get("AGENT_HOST", "localhost")
+    policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
+    research_port = os.environ.get("RESEARCH_AGENT_PORT", 9998)
+    provider_port = os.environ.get("PROVIDER_AGENT_PORT", 8001)
+
     prompt = "I'm based in Boston, MA. How do I get mental health therapy near me and what does my insurance cover?"
     print("ℹ️", "Initializing agents and tools")
 
-    policy_agent = A2AAgent(url="http://localhost:9999", memory=UnconstrainedMemory())
+    policy_agent = A2AAgent(
+        url=f"http://{host}:{policy_port}", memory=UnconstrainedMemory()
+    )
     # Run `check_agent_exists()` to populate AgentCard
     # asyncio.run(policy_agent.check_agent_exists())
     await policy_agent.check_agent_exists()
     print("\tℹ️", f"{policy_agent.name} initialized")
 
-    research_agent = A2AAgent(url="http://localhost:9998", memory=UnconstrainedMemory())
+    research_agent = A2AAgent(
+        url=f"http://{host}:{research_port}", memory=UnconstrainedMemory()
+    )
     # asyncio.run(research_agent.check_agent_exists())
 
     await research_agent.check_agent_exists()
     print("\tℹ️", f"{research_agent.name} initialized")
 
-    provider_agent = A2AAgent(url="http://localhost:8001", memory=UnconstrainedMemory())
+    provider_agent = A2AAgent(
+        url=f"http://{host}:{provider_port}", memory=UnconstrainedMemory()
+    )
     # asyncio.run(provider_agent.check_agent_exists())
 
     await provider_agent.check_agent_exists()
@@ -89,8 +106,8 @@ async def main() -> None:
 
     print("\tℹ️", f"{healthcare_agent.meta.name} initialized")
 
-    # # Register the agent with the A2A server and run the HTTP server
-    # # we use LRU memory manager to keep limited amount of sessions in the memory
+    # Register the agent with the A2A server and run the HTTP server
+    # we use LRU memory manager to keep limited amount of sessions in the memory
     # server = A2AServer(
     #     config=A2AServerConfig(host="localhost", port=9997),
     #     memory_manager=LRUMemoryManager(maxsize=100),
@@ -99,12 +116,16 @@ async def main() -> None:
     # server.serve()
 
     try:
-        response = await healthcare_agent.run(
-            prompt,
-            total_max_retries=3,
-            max_retries_per_step=1,
-            max_iterations=10,
-        ).middleware(GlobalTrajectoryMiddleware(excluded=[Requirement]))
+        response = (
+            await healthcare_agent.run(
+                prompt,
+                total_max_retries=3,
+                max_retries_per_step=1,
+                max_iterations=10,
+            )
+            .on("update", print_update)
+            .middleware(GlobalTrajectoryMiddleware(excluded=[Requirement]))
+        )
 
         print("Agent 🤖 : ", response.last_message.text)
     except FrameworkError as e:
