@@ -16,7 +16,7 @@ dependencies = [
     "google-auth",
     "rich",
     "fasta2a>=0.6.0",
-    "beeai-framework[all]",
+    "beeai-framework[a2a,vertexai]>=0.1.55",
     "termcolor",
 ]
 
