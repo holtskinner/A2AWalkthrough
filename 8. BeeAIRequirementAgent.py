@@ -23,12 +23,8 @@ from beeai_framework.serve.utils import LRUMemoryManager
 from beeai_framework.tools.handoff import HandoffTool
 from beeai_framework.tools.think import ThinkTool
 from dotenv import load_dotenv
-
-
-def print_update(data: A2AAgentUpdateEvent, event: EventMeta) -> None:
-    value = data.value
-    debug_info = value[1] if isinstance(value, tuple) else value
-    print("Agent 🤖 (debug) : ", str(debug_info))
+from rich.console import Console
+from rich.markdown import Markdown
 
 
 async def main() -> None:
@@ -69,7 +65,7 @@ async def main() -> None:
         name="Healthcare Agent",
         description="A personal concierge for Healthcare Information, customized to your policy.",
         llm=VertexAIChatModel(
-            model_id="gemini-2.5-flash",
+            model_id="gemini-2.5-flash-preview-09-2025",
             location="global",
             allow_parallel_tool_calls=True,
         ),
@@ -92,12 +88,16 @@ async def main() -> None:
             ),
         ],
         requirements=[
-            # ConditionalRequirement(ThinkTool, consecutive_allowed=False),
-            AskPermissionRequirement([policy_agent.name, research_agent.name]),
+            ConditionalRequirement(ThinkTool, consecutive_allowed=False),
+            AskPermissionRequirement([research_agent.name, policy_agent.name]),
         ],
         role="Healthcare Concierge",
         instructions=(
-            f"""You are a concierge for healthcare services. Your task is to handoff to one or more agents to answer questions and provide a detailed summary of their answers. First, use `{research_agent.name}` for research about conditions and treatment options. Then use `{provider_agent.name}` for finding providers in their State, and `{policy_agent.name}` for questions on Health Insurance Policies. In your output, put which agent gave you the information."""
+            f"""You are a concierge for healthcare services. Your task is to handoff to one or more agents to answer questions and provide a detailed summary of their answers. First, use `{research_agent.name}` for research about their condition. Provide this research to the user. Then use `{policy_agent.name}` for information about their specific Health Insurance Policy And use `{provider_agent.name}` for finding providers in their location.
+
+            IMPORTANT: When returning answers about providers, only output providers from `{provider_agent.name}` and only provide insurance information based on the results from `{policy_agent.name}`.
+
+            In your output, put which agent gave you the information."""
         ),
         notes=[
             "If user does not provide a valid healthcare-related question, use 'final_answer' tool for clarification."
@@ -115,19 +115,18 @@ async def main() -> None:
 
     # server.serve()
 
-    try:
-        response = (
-            await healthcare_agent.run(
-                prompt,
-                total_max_retries=3,
-                max_retries_per_step=1,
-                max_iterations=10,
-            )
-            .on("update", print_update)
-            .middleware(GlobalTrajectoryMiddleware(excluded=[Requirement]))
-        )
+    console = Console()
 
-        print("Agent 🤖 : ", response.last_message.text)
+    try:
+        response = await healthcare_agent.run(
+            prompt,
+            total_max_retries=1,
+            max_retries_per_step=1,
+            max_iterations=5,
+        ).middleware(GlobalTrajectoryMiddleware(excluded=[Requirement]))
+
+        console.print(Markdown("# 🤖 Agent Final Response"))
+        console.print(Markdown(response.last_message.text))
     except FrameworkError as e:
         print("❌ Error:", e.explain())
 
