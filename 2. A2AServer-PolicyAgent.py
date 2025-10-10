@@ -87,8 +87,8 @@ if __name__ == "__main__":
     )
 
     agent_card = AgentCard(
-        name="Insurance Coverage Agent",
-        description="Provides information about insurance coverage options and details.",
+        name="InsurancePolicyCoverageAgent",
+        description="Provides information about insurance policy coverage options and details.",
         url=f"http://{HOST}:{PORT}/",
         version="1.0.0",
         default_input_modes=["text"],
