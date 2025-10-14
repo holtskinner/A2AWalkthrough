@@ -27,12 +27,13 @@ from rich.console import Console
 from rich.markdown import Markdown
 
 
-async def main() -> None:
+def main() -> None:
     load_dotenv()
     host = os.environ.get("AGENT_HOST", "localhost")
     policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
     research_port = os.environ.get("RESEARCH_AGENT_PORT", 9998)
     provider_port = os.environ.get("PROVIDER_AGENT_PORT", 8001)
+    healthcare_agent_port = int(os.environ.get("HEALTHCARE_AGENT_PORT", 9997))
 
     prompt = "I'm based in Boston, MA. How do I get mental health therapy near me and what does my insurance cover?"
     print("ℹ️", "Initializing agents and tools")
@@ -41,31 +42,28 @@ async def main() -> None:
         url=f"http://{host}:{policy_port}", memory=UnconstrainedMemory()
     )
     # Run `check_agent_exists()` to populate AgentCard
-    # asyncio.run(policy_agent.check_agent_exists())
-    await policy_agent.check_agent_exists()
+    asyncio.run(policy_agent.check_agent_exists())
     print("\tℹ️", f"{policy_agent.name} initialized")
 
     research_agent = A2AAgent(
         url=f"http://{host}:{research_port}", memory=UnconstrainedMemory()
     )
-    # asyncio.run(research_agent.check_agent_exists())
+    asyncio.run(research_agent.check_agent_exists())
 
-    await research_agent.check_agent_exists()
     print("\tℹ️", f"{research_agent.name} initialized")
 
     provider_agent = A2AAgent(
         url=f"http://{host}:{provider_port}", memory=UnconstrainedMemory()
     )
-    # asyncio.run(provider_agent.check_agent_exists())
+    asyncio.run(provider_agent.check_agent_exists())
 
-    await provider_agent.check_agent_exists()
     print("\tℹ️", f"{provider_agent.name} initialized")
 
     healthcare_agent = RequirementAgent(
         name="Healthcare Agent",
         description="A personal concierge for Healthcare Information, customized to your policy.",
         llm=VertexAIChatModel(
-            model_id="gemini-2.5-flash-preview-09-2025",
+            model_id="gemini-2.5-flash",
             location="global",
             allow_parallel_tool_calls=True,
         ),
@@ -108,32 +106,17 @@ async def main() -> None:
 
     # Register the agent with the A2A server and run the HTTP server
     # we use LRU memory manager to keep limited amount of sessions in the memory
-    # server = A2AServer(
-    #     config=A2AServerConfig(host="localhost", port=9997),
-    #     memory_manager=LRUMemoryManager(maxsize=100),
-    # ).register(healthcare_agent)
+    server = A2AServer(
+        config=A2AServerConfig(host=host, port=healthcare_agent_port),
+        memory_manager=LRUMemoryManager(maxsize=100),
+    ).register(healthcare_agent)
 
-    # server.serve()
-
-    console = Console()
-
-    try:
-        response = await healthcare_agent.run(
-            prompt,
-            total_max_retries=1,
-            max_retries_per_step=1,
-            max_iterations=5,
-        ).middleware(GlobalTrajectoryMiddleware(excluded=[Requirement]))
-
-        console.print(Markdown("# 🤖 Agent Final Response"))
-        console.print(Markdown(response.last_message.text))
-    except FrameworkError as e:
-        print("❌ Error:", e.explain())
+    server.serve()
 
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        main()
     except FrameworkError as e:
         print("🛑", f"Fatal framework error: {e!s}")
         traceback.print_exc()
