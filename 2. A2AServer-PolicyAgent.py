@@ -41,6 +41,8 @@ class InsuranceAgentExecutor(AgentExecutor):
         context: RequestContext,
         event_queue: EventQueue,
     ) -> None:
+        prompt = context.get_user_input()
+        print(prompt)
         response = self.client.messages.create(
             model="claude-3-5-haiku@20241022",
             max_tokens=1024,
@@ -59,7 +61,7 @@ class InsuranceAgentExecutor(AgentExecutor):
                         ),
                         TextBlockParam(
                             type="text",
-                            text=context.get_user_input(),
+                            text=prompt,
                         ),
                     ],
                 )
@@ -88,8 +90,8 @@ if __name__ == "__main__":
     )
 
     agent_card = AgentCard(
-        name="Insurance Coverage Agent",
-        description="Provides information about insurance coverage options and details.",
+        name="InsurancePolicyCoverageAgent",
+        description="Provides information about insurance policy coverage options and details.",
         url=f"http://{HOST}:{PORT}/",
         version="1.0.0",
         default_input_modes=["text"],

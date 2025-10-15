@@ -212,7 +212,7 @@
         },
         "languages": ["English", "Portuguese"],
         "accepts_new_patients": "True",
-        "insurance_accepted": ["Blue Cross Blue Shield", "Harvard Pilgrim", "Tufts Health Plan"]
+        "insurance_accepted": ["Anthem Blue Cross Blue Shield", "Harvard Pilgrim", "Tufts Health Plan"]
     },
     
     "DOC010": {

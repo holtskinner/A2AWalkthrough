@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     root_agent = LlmAgent(
         model="gemini-2.5-pro",
-        name="health_research_agent",
+        name="HealthResearchAgent",
         tools=[google_search],
         description="Provides healthcare information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
         instruction="You are a healthcare research agent tasked with providing information health conditions. Use the google_search tool to find information on the web about options.",

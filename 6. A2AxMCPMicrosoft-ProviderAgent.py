@@ -54,8 +54,10 @@ class ProviderAgentExecutor(AgentExecutor):
         context: RequestContext,
         event_queue: EventQueue,
     ) -> None:
+        prompt = context.get_user_input()
+        print(prompt)
         result = await self.agent.run(
-            context.get_user_input(),
+            prompt,
             tools=self.mcp_server,
         )
 
@@ -85,8 +87,8 @@ if __name__ == "__main__":
     )
 
     agent_card = AgentCard(
-        name="Healthcare Provider Finder Agent",
-        description="An agent that can find and list healthcare providers based on a user's location (state) and desired specialty.",
+        name="HealthcareProviderFinderAgent",
+        description="An agent that can find and list healthcare providers based on a user's location and desired specialty.",
         url=f"http://{HOST}:{PORT}/",
         version="1.0.0",
         default_input_modes=["text"],
