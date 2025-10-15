@@ -24,8 +24,8 @@ def main() -> None:
     host = os.environ.get("AGENT_HOST", "localhost")
     policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
     research_port = os.environ.get("RESEARCH_AGENT_PORT", 9998)
-    provider_port = os.environ.get("PROVIDER_AGENT_PORT", 8001)
-    healthcare_agent_port = int(os.environ.get("HEALTHCARE_AGENT_PORT", 9997))
+    provider_port = os.environ.get("PROVIDER_AGENT_PORT", 9997)
+    healthcare_agent_port = int(os.environ.get("HEALTHCARE_AGENT_PORT", 9996))
 
     prompt = "I'm based in Boston, MA. How do I get mental health therapy near me and what does my insurance cover?"
     print("ℹ️", "Initializing agents and tools")
