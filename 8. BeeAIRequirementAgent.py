@@ -4,27 +4,19 @@ import sys
 import traceback
 
 from beeai_framework.adapters.a2a import A2AServer, A2AServerConfig
-from beeai_framework.adapters.a2a.agents import A2AAgent, A2AAgentUpdateEvent
+from beeai_framework.adapters.a2a.agents import A2AAgent
 from beeai_framework.adapters.vertexai import VertexAIChatModel
 from beeai_framework.agents.requirement import RequirementAgent
-from beeai_framework.agents.requirement.requirements import Requirement
-from beeai_framework.agents.requirement.requirements.ask_permission import (
-    AskPermissionRequirement,
-)
 from beeai_framework.agents.requirement.requirements.conditional import (
     ConditionalRequirement,
 )
-from beeai_framework.emitter import EventMeta
 from beeai_framework.errors import FrameworkError
 from beeai_framework.memory import UnconstrainedMemory
 from beeai_framework.memory.unconstrained_memory import UnconstrainedMemory
-from beeai_framework.middleware.trajectory import GlobalTrajectoryMiddleware
 from beeai_framework.serve.utils import LRUMemoryManager
 from beeai_framework.tools.handoff import HandoffTool
 from beeai_framework.tools.think import ThinkTool
 from dotenv import load_dotenv
-from rich.console import Console
-from rich.markdown import Markdown
 
 
 def main() -> None:
@@ -87,7 +79,7 @@ def main() -> None:
         ],
         requirements=[
             ConditionalRequirement(ThinkTool, consecutive_allowed=False),
-            AskPermissionRequirement([research_agent.name, policy_agent.name]),
+            # AskPermissionRequirement([research_agent.name, policy_agent.name]),
         ],
         role="Healthcare Concierge",
         instructions=(
