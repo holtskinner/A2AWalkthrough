@@ -10,7 +10,7 @@ from rich.markdown import Markdown
 async def main() -> None:
     load_dotenv()
     host = os.environ.get("AGENT_HOST", "localhost")
-    port = os.environ.get("PROVIDER_AGENT_PORT", 8001)
+    port = os.environ.get("PROVIDER_AGENT_PORT", 9997)
     base_url = f"http://{host}:{port}"
 
     console = Console()
