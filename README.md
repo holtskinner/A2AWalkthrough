@@ -8,5 +8,6 @@
 5. [Chained Agent] ADK `WorkflowAgent` connecting to Policy Agent and Health Agent in sequence. Using [ADK A2A consuming](https://google.github.io/adk-docs/a2a/quickstart-consuming/).
 6. [Provider Agent] A2A Agent calling an MCP Server, built with Microsoft Agent Framework and OpenAI OSS on Vertex AI
     - Note: Microsoft Agent Framework doesn't have built in A2A Exposing, need to build `AgentExecutor`.
-7. A2A Client with Microsoft Agent Framework built-in Client
+7. A2A Client with [Microsoft Agent Framework built-in Client](https://learn.microsoft.com/en-us/agent-framework/user-guide/agents/agent-types/a2a-agent?pivots=programming-language-python)
 8. [Health Agent] Full General Healthcare Agent built with [BeeAI Requirements Agent](https://framework.beeai.dev/experimental/requirement-agent) to call all of the A2A Agents in an Agentic way.
+    - Using [BeeAI Built-in A2A Support](https://framework.beeai.dev/integrations/a2a)
