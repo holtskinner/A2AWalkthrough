@@ -11,7 +11,7 @@ if __name__ == "__main__":
     load_dotenv()
 
     HOST = "localhost"
-    PORT = 8001
+    PORT = 9997
 
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
     location = "us-east5"

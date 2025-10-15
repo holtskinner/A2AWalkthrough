@@ -71,7 +71,7 @@ class ProviderAgentExecutor(AgentExecutor):
 if __name__ == "__main__":
     load_dotenv()
     HOST = os.environ.get("AGENT_HOST", "localhost")
-    PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 8001))
+    PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 9997))
 
     skill = AgentSkill(
         id="find_healthcare_providers",
