@@ -4,10 +4,7 @@ import warnings
 
 from dotenv import load_dotenv
 from google.adk.agents import BaseAgent, SequentialAgent
-from google.adk.agents.remote_a2a_agent import (
-    AGENT_CARD_WELL_KNOWN_PATH,
-    RemoteA2aAgent,
-)
+from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
@@ -49,13 +46,12 @@ async def run_hospital_workflow() -> None:
 
     policy_agent = RemoteA2aAgent(
         name="policy_agent",
-        agent_card=f"http://{host}:{policy_port}{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{policy_port}",
     )
     health_research_agent = RemoteA2aAgent(
         name="health_research_agent",
-        agent_card=f"http://{host}:{research_port}{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{research_port}",
     )
-
     root_agent = SequentialAgent(
         name="root_agent",
         description="Healthcare Routing Agent",
