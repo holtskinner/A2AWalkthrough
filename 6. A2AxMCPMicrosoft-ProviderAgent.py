@@ -71,6 +71,7 @@ class ProviderAgentExecutor(AgentExecutor):
 
 
 if __name__ == "__main__":
+    print("Running Healthcare Provider Agent")
     load_dotenv()
     HOST = os.environ.get("AGENT_HOST", "localhost")
     PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 9997))

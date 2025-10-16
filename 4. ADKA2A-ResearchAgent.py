@@ -10,6 +10,7 @@ from google.adk.tools import google_search
 warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
+    print("Running Healthcare Research Agent")
     load_dotenv()
     PORT = int(os.environ.get("RESEARCH_AGENT_PORT", 9998))
     HOST = os.environ.get("AGENT_HOST", "localhost")

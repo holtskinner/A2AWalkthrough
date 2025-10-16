@@ -77,6 +77,7 @@ class InsuranceAgentExecutor(AgentExecutor):
 
 
 if __name__ == "__main__":
+    print("Running Health Insurance Policy Agent")
     load_dotenv()
     PORT = int(os.environ.get("POLICY_AGENT_PORT", 9999))
     HOST = os.environ.get("AGENT_HOST", "localhost")

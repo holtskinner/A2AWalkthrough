@@ -20,6 +20,8 @@ from dotenv import load_dotenv
 
 
 def main() -> None:
+    print("Running General Healthcare Agent")
+
     load_dotenv()
     host = os.environ.get("AGENT_HOST", "localhost")
     policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
