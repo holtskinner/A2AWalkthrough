@@ -39,7 +39,7 @@ class ProviderAgentExecutor(AgentExecutor):
 
         mcp_client = MultiServerMCPClient(
             {
-                "healthcare_providers": StdioConnection(
+                "find_healthcare_providers": StdioConnection(
                     transport="stdio",
                     command="uv",
                     args=["run", "mcpserver.py"],
@@ -55,7 +55,7 @@ class ProviderAgentExecutor(AgentExecutor):
             ),
             tools,
             name="HealthcareProviderAgent",
-            prompt="Your task is to find and list providers using the healthcare_providers MCP Tool based on the users query. Only use providers based on the response from the tool.",
+            prompt="Your task is to find and list providers using the find_healthcare_providers MCP Tool based on the users query. Only use providers based on the response from the tool.",
         )
 
     async def execute(
@@ -63,6 +63,7 @@ class ProviderAgentExecutor(AgentExecutor):
         context: RequestContext,
         event_queue: EventQueue,
     ) -> None:
+        print(context)
         prompt = context.get_user_input()
         print(prompt)
 
@@ -90,6 +91,7 @@ if __name__ == "__main__":
     HOST = os.environ.get("AGENT_HOST", "localhost")
     PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 9997))
 
+    agent_executor = ProviderAgentExecutor()
     skill = AgentSkill(
         id="find_healthcare_providers",
         name="Find Healthcare Providers",
@@ -102,7 +104,7 @@ if __name__ == "__main__":
     )
 
     agent_card = AgentCard(
-        name="HealthcareProviderFinderAgent",
+        name=agent_executor.agent.name,
         description="An agent that can find and list healthcare providers based on a user's location and desired specialty.",
         url=f"http://{HOST}:{PORT}/",
         version="1.0.0",
@@ -113,7 +115,7 @@ if __name__ == "__main__":
     )
 
     request_handler = DefaultRequestHandler(
-        agent_executor=ProviderAgentExecutor(),
+        agent_executor=agent_executor,
         task_store=InMemoryTaskStore(),
     )
 
