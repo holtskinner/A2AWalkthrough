@@ -63,16 +63,23 @@ async def main() -> None:
     load_dotenv()
 
     host = os.environ.get("AGENT_HOST", "localhost")
-    port = os.environ.get("POLICY_AGENT_PORT", 9999)
-    base_url = f"http://{host}:{port}"
 
+    # TODO: edit the following lines when running this Module
+
+    # To connect to Module 2
+    port = os.environ.get("POLICY_AGENT_PORT")
     prompt = "How much would I pay for mental health therapy?"
+
+    # To connect to Module 4
+    # port = os.environ.get("RESEARCH_AGENT_PORT")
+    # prompt = "How do I get mental health therapy?"
+
     console = Console()
 
     async with httpx.AsyncClient(timeout=100.0) as httpx_client:
         # Step 1: Discover the agent by fetching its card
         agent_card = await A2ACardResolver(
-            httpx_client=httpx_client, base_url=base_url
+            httpx_client=httpx_client, base_url=f"http://{host}:{port}"
         ).get_agent_card()
         print_agent_card(console, agent_card)
 
