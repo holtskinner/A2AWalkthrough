@@ -5,17 +5,20 @@ import warnings
 from dotenv import load_dotenv
 from google.adk.agents import BaseAgent, SequentialAgent
 from google.adk.agents.remote_a2a_agent import (
-    AGENT_CARD_WELL_KNOWN_PATH,
     RemoteA2aAgent,
 )
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+from rich.console import Console
+from rich.markdown import Markdown
 
 warnings.filterwarnings("ignore")
 
 
 async def call_agent_async(agent: BaseAgent, query: str) -> None:
+    print("Running Healthcare Workflow Agent")
+    console = Console()
     APP_NAME = "health_app"
     USER_ID = "user_1"
     SESSION_ID = "session_001"  # Using a fixed ID for simplicity
@@ -34,8 +37,8 @@ async def call_agent_async(agent: BaseAgent, query: str) -> None:
 
     async for event in events:
         if event.is_final_response():
-            final_response = event.content.parts[0].text
-            print("Agent Response: ", final_response)
+            text_content = event.content.parts[0].text
+            console.print(Markdown(text_content))
 
 
 async def run_hospital_workflow() -> None:
@@ -49,12 +52,14 @@ async def run_hospital_workflow() -> None:
 
     policy_agent = RemoteA2aAgent(
         name="policy_agent",
-        agent_card=f"http://{host}:{policy_port}{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{policy_port}",
     )
+    print("\tℹ️", f"{policy_agent.name} initialized")
     health_research_agent = RemoteA2aAgent(
         name="health_research_agent",
-        agent_card=f"http://{host}:{research_port}{AGENT_CARD_WELL_KNOWN_PATH}",
+        agent_card=f"http://{host}:{research_port}",
     )
+    print("\tℹ️", f"{health_research_agent.name} initialized")
 
     root_agent = SequentialAgent(
         name="root_agent",
@@ -64,6 +69,8 @@ async def run_hospital_workflow() -> None:
             policy_agent,
         ],
     )
+    print("\tℹ️", f"{root_agent.name} initialized")
+
     await call_agent_async(
         root_agent,
         prompt,
