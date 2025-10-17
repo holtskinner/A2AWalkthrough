@@ -15,40 +15,133 @@
 
 ## How to Run
 
-For each module, run:
+Follow these steps to set up your environment and run the example agents. Each numbered module (`1. ...`, `2. ...`, etc.) is designed to be run in sequence.
+
+#### 1. Initial Setup
+
+Before running the examples, complete the following setup steps:
+
+1. **Authenticate with Google Cloud:**
+    - Create or select a Google Cloud Project.
+    - Enable the Vertex AI API in your project.
+    - Set up your local application-default credentials by running `gcloud auth application-default login`.
+
+2. **Configure Environment Variables:**
+    - In the project root, make a copy of `example.env` and rename it to `.env`.
+    - Open the new `.env` file and set your `GOOGLE_CLOUD_PROJECT` ID.
+
+#### 2. Running the Examples
+
+Agent servers (`2`, `4`, `6`, `8`) are long-running processes. You must open a new terminal for each one and leave it running in the background to proceed with the walkthrough.
+
+**Example 1: Basic Question Answering**
+
+This script runs a single query and then exits.
 
 ```sh
-uv run filename.py
-```
-
-E.g.
-
-```sh
+# In your terminal:
 uv run 1.\ BasicQA.py
 ```
 
-### Procedure for course
+---
 
-- Setup Authentication for Vertex AI
-  - Create Google Cloud Project
-  - Enable Vertex AI API
-  - Enable Vertex AI Model Garden Models
-  - Download `credentials.json` file and enable environment.
-- Copy `example.env` into `.env`
-  - Update `.env` with Google Cloud Project ID
-- Run Module 1
-- Open a new terminal and Run Module 2. Keep it running
-- Open a new terminal and run Module 3
-  - This will connect the A2A Client in Module 3 to the A2A Server in Module 2
-- Open a new terminal and run Module 4. Keep it running
-- Edit Module 3 source code where `TODO` is marked to connect to module 4
-- In a new terminal (or the same where you previously ran Module 3) run Module 3
-  - This will connect the A2A Client in Module 3 to the A2A Server in Module 4
-- Open a new terminal and run Module 5.
-  - This will connect to both Module 2 and Module 4
-- Open a new terminal and run Module 6. Keep it Running
-- Open a new terminal and run Module 7.
-  - This will connect the A2A Client in Module 7 to the A2A Server in Module 6.
-- Open a new terminal and run Module 8. Keep it running
-- Open a new terminal and run Module 9.
-  - This will connect the A2A Client in Module 9 to the A2A Server in Module 8.
+**Examples 2 & 3: Basic A2A Communication**
+
+This demonstrates a basic client-server interaction.
+
+1. **Start the Policy Agent Server:** (Leave this running)
+
+    ```sh
+    # In Terminal 1:
+    uv run 2.\ A2AServer-PolicyAgent.py
+    ```
+
+2. **Run the A2A Client:**
+
+    ```sh
+    # In Terminal 2:
+    uv run 3.\ A2AClient.py
+    ```
+
+    This client will connect to the server from the previous step.
+
+---
+
+**Example 4: Health Research Agent**
+
+Next, we connect the same client to a different agent.
+
+1. **Start the Research Agent Server:** (Leave this running)
+
+    ```sh
+    # In Terminal 3:
+    uv run 4.\ ADKA2A-ResearchAgent.py
+    ```
+
+2. **Update the Client:**
+    - Open the file `3. A2AClient.py` in your editor.
+    - Comment out the lines for "Module 2" and uncomment the lines for "Module 4" under the `TODO` section to switch the target agent.
+
+3. **Run the A2A Client Again:**
+
+    ```sh
+    # In Terminal 2 (or a new one):
+    uv run 3.\ A2AClient.py
+    ```
+
+    The client will now connect to the research agent.
+
+---
+
+**Example 5: Sequential (Chained) Agent**
+
+This agent connects to the two servers you already have running.
+
+*Ensure the `Policy Agent` (Module 2) and `Research Agent` (Module 4) are still running in their respective terminals.*
+
+```sh
+# In a new terminal:
+uv run 5.\ ADKSequentialAgent.py
+```
+
+---
+
+**Examples 6 & 7: Provider Agent with LangGraph**
+
+This demonstrates an agent built with LangGraph interacting with a client built with Microsoft Agent Framework.
+
+1. **Start the Provider Agent Server:** (Leave this running)
+
+    ```sh
+    # In a new terminal:
+    uv run 6.\ A2AxMCPLangGraph-ProviderAgent.py
+    ```
+
+2. **Run the Microsoft A2A Client:**
+
+    ```sh
+    # In another new terminal:
+    uv run 7.\ A2AMicrosoftClient.py
+    ```
+
+---
+
+**Examples 8 & 9: General Healthcare Agent with BeeAI**
+
+This showcases a complex agent that orchestrates multiple agents.
+
+1. **Start the General Healthcare Agent Server:** (Leave this running)
+
+    ```sh
+    # In a new terminal:
+    uv run 8.\ BeeAIRequirementAgent.py
+    ```
+
+2. **Run the BeeAI Client:**
+
+    ```sh
+    # In another new terminal:
+    uv run 9.\ BeeAIClient.py
+    ```
+
+    This client starts an interactive chat session with the main healthcare agent.
