@@ -23,7 +23,7 @@ with open("./data/2026AnthemgHIPSBC.pdf", "rb") as file:
 prompt = "How much would I pay for mental health therapy?"
 
 response = client.messages.create(
-    model="claude-3-5-haiku@20241022",
+    model="claude-haiku-4-5@20251001",
     max_tokens=1024,
     system="You are an expert insurance agent designed to assist with coverage queries. Use the provided documents to answer questions about insurance policies. If the information is not available in the documents, respond with 'I don't know'",
     messages=[
