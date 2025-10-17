@@ -24,6 +24,9 @@ Before running the examples, complete the following setup steps:
 1. **Authenticate with Google Cloud:**
     - Create or select a Google Cloud Project.
     - Enable the Vertex AI API in your project.
+    - Enable the Model Garden models used in the modules
+      - [Claude 4.5 Haiku](https://console.cloud.google.com/vertex-ai/publishers/anthropic/model-garden/claude-haiku-4-5)
+      - [GPT OSS 120b](https://console.cloud.google.com/vertex-ai/publishers/openai/model-garden/gpt-oss-120b-maas)
     - Set up your local application-default credentials by running `gcloud auth application-default login`.
 
 2. **Configure Environment Variables:**
@@ -95,7 +98,7 @@ Next, we connect the same client to a different agent.
 
 **Example 5: Sequential (Chained) Agent**
 
-This agent connects to the two servers you already have running.
+This agent connects to the two A2A Agents you already have running.
 
 *Ensure the `Policy Agent` (Module 2) and `Research Agent` (Module 4) are still running in their respective terminals.*
 
@@ -145,3 +148,8 @@ This showcases a complex agent that orchestrates multiple agents.
     ```
 
     This client starts an interactive chat session with the main healthcare agent.
+    Type in a prompt like:
+
+    ```none
+    I'm based in Boston, MA. How do I get mental health therapy near me and what does my insurance cover?
+    ```
