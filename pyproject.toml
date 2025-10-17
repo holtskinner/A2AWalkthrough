@@ -12,12 +12,12 @@ dependencies = [
     "mcp>=1.7.1",
     "agent-framework==1.0.0b251007",
     "agent-framework-a2a==1.0.0b251007",
-    "pydantic-ai-slim[openai,vertexai,a2a]",
+    "langchain-mcp-adapters",
+    "langgraph",
+    "langchain[openai]",
     "google-auth",
     "rich",
-    "fasta2a>=0.6.0",
     "beeai-framework[a2a,vertexai]>=0.1.55",
-    "termcolor",
 ]
 
 [tool.ruff]

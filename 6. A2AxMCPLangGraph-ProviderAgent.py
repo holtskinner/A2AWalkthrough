@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 import google.auth
@@ -14,10 +15,12 @@ from a2a.types import (
     AgentSkill,
 )
 from a2a.utils import new_agent_text_message
-from agent_framework import ChatAgent, MCPStdioTool
-from agent_framework.openai import OpenAIChatClient
 from dotenv import load_dotenv
 from google.auth import default
+from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain_mcp_adapters.sessions import StdioConnection
+from langchain_openai import ChatOpenAI
+from langgraph.prebuilt import create_react_agent
 
 
 class ProviderAgentExecutor(AgentExecutor):
@@ -34,19 +37,25 @@ class ProviderAgentExecutor(AgentExecutor):
         )
         credentials.refresh(google.auth.transport.requests.Request())
 
-        self.mcp_server = MCPStdioTool(
-            name="healthcare_providers",
-            command="uv",
-            args=["run", "mcpserver.py"],
+        mcp_client = MultiServerMCPClient(
+            {
+                "find_healthcare_providers": StdioConnection(
+                    transport="stdio",
+                    command="uv",
+                    args=["run", "mcpserver.py"],
+                )
+            }
         )
-        self.agent = ChatAgent(
-            chat_client=OpenAIChatClient(
-                model_id="openai/gpt-oss-120b-maas",
-                base_url=base_url,
-                api_key=credentials.token,
+        tools = asyncio.run(mcp_client.get_tools())
+        self.agent = create_react_agent(
+            ChatOpenAI(
+                model="openai/gpt-oss-120b-maas",
+                openai_api_key=credentials.token,
+                openai_api_base=base_url,
             ),
+            tools,
             name="HealthcareProviderAgent",
-            instructions="Your task is to find and list providers using the healthcare_providers MCP Tool based on the users query.",
+            prompt="Your task is to find and list providers using the find_healthcare_providers MCP Tool based on the users query. Only use providers based on the response from the tool.",
         )
 
     async def execute(
@@ -54,16 +63,23 @@ class ProviderAgentExecutor(AgentExecutor):
         context: RequestContext,
         event_queue: EventQueue,
     ) -> None:
+        print(context)
         prompt = context.get_user_input()
         print(prompt)
-        result = await self.agent.run(
-            prompt,
-            tools=self.mcp_server,
-        )
 
+        response = await self.agent.ainvoke(
+            {
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ]
+            }
+        )
         # Use only the response after the tool call
         await event_queue.enqueue_event(
-            new_agent_text_message(result.messages[-1].text)
+            new_agent_text_message(response["messages"][-1].content)
         )
 
     async def cancel(self, context: RequestContext, event_queue: EventQueue) -> None:
@@ -76,6 +92,7 @@ if __name__ == "__main__":
     HOST = os.environ.get("AGENT_HOST", "localhost")
     PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 9997))
 
+    agent_executor = ProviderAgentExecutor()
     skill = AgentSkill(
         id="find_healthcare_providers",
         name="Find Healthcare Providers",
@@ -88,7 +105,7 @@ if __name__ == "__main__":
     )
 
     agent_card = AgentCard(
-        name="HealthcareProviderFinderAgent",
+        name=agent_executor.agent.name,
         description="An agent that can find and list healthcare providers based on a user's location and desired specialty.",
         url=f"http://{HOST}:{PORT}/",
         version="1.0.0",
@@ -99,7 +116,7 @@ if __name__ == "__main__":
     )
 
     request_handler = DefaultRequestHandler(
-        agent_executor=ProviderAgentExecutor(),
+        agent_executor=agent_executor,
         task_store=InMemoryTaskStore(),
     )
 
