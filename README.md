@@ -2,6 +2,7 @@
 
 1. Basic Question Answering Agent about Insurance Policies with Claude Model as a Service on Vertex AI (No Agent Framework)
     - [ ] Figure out how MaaS APIs would work for DL.AI Cloud Environment
+    - [ ] Add Optional Reading Item to show how to use CrewAI with this.
 2. [Insurance Policy Agent] Turn QA Agent into A2A Agent Server with A2A SDK (No Framework to show how the SDK works.)
 3. Basic A2A Client with A2A SDK to show communication (No Framework to show how SDK works)
 4. [Health Research Agent] ADK Agent using Gemini with Google Search tool to answer Health-based Questions. Using [ADK A2A exposing](https://google.github.io/adk-docs/a2a/quickstart-exposing/).
