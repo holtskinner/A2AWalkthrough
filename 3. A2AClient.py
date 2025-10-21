@@ -3,7 +3,6 @@ import os
 
 import httpx
 from a2a.client import (
-    A2ACardResolver,
     Client,
     ClientConfig,
     ClientFactory,
@@ -77,20 +76,17 @@ async def main() -> None:
     console = Console()
 
     async with httpx.AsyncClient(timeout=100.0) as httpx_client:
-        # Step 1: Discover the agent by fetching its card
-        agent_card = await A2ACardResolver(
-            httpx_client=httpx_client, base_url=f"http://{host}:{port}"
-        ).get_agent_card()
-        print_agent_card(console, agent_card)
-
-        # Step 2: Create a client
-        client_factory = ClientFactory(
-            config=ClientConfig(
+        # Step 1: Create a client
+        client: Client = await ClientFactory.connect(
+            f"http://{host}:{port}",
+            client_config=ClientConfig(
                 httpx_client=httpx_client,
-                streaming=True,
-            )
+            ),
         )
-        client: Client = client_factory.create(agent_card)
+
+        # Step 2: Discover the agent by fetching its card
+        agent_card = await client.get_card()
+        print_agent_card(console, agent_card)
 
         # Step 3: Create the message using a convenient helper function
         message = create_text_message_object(content=prompt)
