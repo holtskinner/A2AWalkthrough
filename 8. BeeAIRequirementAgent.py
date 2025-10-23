@@ -29,7 +29,6 @@ def main() -> None:
     provider_port = os.environ.get("PROVIDER_AGENT_PORT", 9997)
     healthcare_agent_port = int(os.environ.get("HEALTHCARE_AGENT_PORT", 9996))
 
-    prompt = "I'm based in Boston, MA. How do I get mental health therapy near me and what does my insurance cover?"
     print("ℹ️", "Initializing agents and tools")
 
     policy_agent = A2AAgent(
@@ -58,6 +57,7 @@ def main() -> None:
         description="A personal concierge for Healthcare Information, customized to your policy.",
         llm=VertexAIChatModel(
             model_id="gemini-2.5-flash",
+            project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
             location="global",
             allow_parallel_tool_calls=True,
         ),
