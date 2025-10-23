@@ -1,5 +1,6 @@
 import base64
 import os
+from pathlib import Path
 
 from anthropic import AnthropicVertex
 from anthropic.types import (
@@ -19,7 +20,7 @@ class PolicyAgent:
             project_id=os.environ.get("GOOGLE_CLOUD_PROJECT"),
             region="us-east5",
         )
-        with open("./data/2026AnthemgHIPSBC.pdf", "rb") as file:
+        with Path("./data/2026AnthemgHIPSBC.pdf").open("rb") as file:
             self.pdf_data = base64.standard_b64encode(file.read()).decode("utf-8")
 
     def answer_query(self, prompt: str) -> str:

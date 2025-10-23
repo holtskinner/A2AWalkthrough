@@ -24,6 +24,7 @@ from anthropic.types import (
 from dotenv import load_dotenv
 
 
+# Same Agent from Module 1
 class PolicyAgent:
 
     def __init__(self):
@@ -32,7 +33,7 @@ class PolicyAgent:
             project_id=os.environ.get("GOOGLE_CLOUD_PROJECT"),
             region="us-east5",
         )
-        with open("./data/2026AnthemgHIPSBC.pdf", "rb") as file:
+        with Path("./data/2026AnthemgHIPSBC.pdf").open("rb") as file:
             self.pdf_data = base64.standard_b64encode(file.read()).decode("utf-8")
 
     def answer_query(self, prompt: str) -> str:
@@ -67,7 +68,6 @@ class InsuranceAgentExecutor(AgentExecutor):
     """This is an agent for questions around policy coverage, it uses a RAG pattern to find answers based on policy documentation. Use it to help answer questions on coverage and waiting periods."""
 
     def __init__(self) -> None:
-        load_dotenv()
         self.agent = PolicyAgent()
 
     async def execute(
