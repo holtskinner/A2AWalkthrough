@@ -1,6 +1,7 @@
 import os
 import sys
 
+from google.oauth2.service_account import Credentials
 from rich.console import Console
 from rich.markdown import Markdown
 
@@ -64,3 +65,9 @@ class ConsoleReader:
     def ask_single_question(self, query_message: str) -> str:
         answer = self.console.input(f"[bold cyan]{query_message}[/]")
         return answer.strip()
+
+
+def get_credentials() -> Credentials:
+    return Credentials.from_service_account_file(
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+    )
