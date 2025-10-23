@@ -18,7 +18,7 @@ class PolicyAgent:
         load_dotenv()
         self.client = AnthropicVertex(
             project_id=os.environ.get("GOOGLE_CLOUD_PROJECT"),
-            region="us-east5",
+            region="global",
         )
         with Path("./data/2026AnthemgHIPSBC.pdf").open("rb") as file:
             self.pdf_data = base64.standard_b64encode(file.read()).decode("utf-8")
