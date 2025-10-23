@@ -25,3 +25,4 @@ db/
 *.bin
 
 originals/
+credentials.json
