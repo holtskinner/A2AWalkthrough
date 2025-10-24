@@ -31,7 +31,10 @@ Before running the examples, complete the following setup steps:
 
 2. **Configure Environment Variables:**
     - In the project root, make a copy of `example.env` and rename it to `.env`.
-    - Open the new `.env` file and set your `GOOGLE_CLOUD_PROJECT` ID.
+
+    ```sh
+    cp example.env .env
+    ```
 
 #### 2. Running the Examples
 
