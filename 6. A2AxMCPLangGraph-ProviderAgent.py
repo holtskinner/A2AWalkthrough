@@ -22,20 +22,16 @@ from langchain_mcp_adapters.sessions import StdioConnection
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 
+from helpers import authenticate
+
 
 class ProviderAgentExecutor(AgentExecutor):
     """Example using a local MCP server via stdio."""
 
     def __init__(self) -> None:
-        project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
-        location = "global"
-        base_url = f"https://aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/endpoints/openapi"
-
-        # Get Google Cloud Credentials
-        credentials, _ = default(
-            scopes=["https://www.googleapis.com/auth/cloud-platform"]
-        )
-        credentials.refresh(google.auth.transport.requests.Request())
+        credentials, project_id = authenticate()
+        location = "us-central1"
+        base_url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/endpoints/openapi"
 
         mcp_client = MultiServerMCPClient(
             {
@@ -49,7 +45,7 @@ class ProviderAgentExecutor(AgentExecutor):
         tools = asyncio.run(mcp_client.get_tools())
         self.agent = create_react_agent(
             ChatOpenAI(
-                model="openai/gpt-oss-120b-maas",
+                model="openai/gpt-oss-20b-maas",
                 openai_api_key=credentials.token,
                 openai_api_base=base_url,
             ),
@@ -89,8 +85,8 @@ class ProviderAgentExecutor(AgentExecutor):
 if __name__ == "__main__":
     print("Running Healthcare Provider Agent")
     load_dotenv()
-    HOST = os.environ.get("AGENT_HOST", "localhost")
-    PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 9997))
+    HOST = os.environ.get("AGENT_HOST")
+    PORT = int(os.environ.get("PROVIDER_AGENT_PORT"))
 
     agent_executor = ProviderAgentExecutor()
     skill = AgentSkill(

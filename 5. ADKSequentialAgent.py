@@ -44,9 +44,9 @@ async def call_agent_async(agent: BaseAgent, query: str) -> None:
 async def run_hospital_workflow() -> None:
     load_dotenv()
 
-    host = os.environ.get("AGENT_HOST", "localhost")
-    policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
-    research_port = os.environ.get("RESEARCH_AGENT_PORT", 9998)
+    host = os.environ.get("AGENT_HOST")
+    policy_port = os.environ.get("POLICY_AGENT_PORT")
+    research_port = os.environ.get("RESEARCH_AGENT_PORT")
 
     prompt = "How can I get mental health therapy?"
 

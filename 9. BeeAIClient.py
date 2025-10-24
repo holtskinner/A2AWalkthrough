@@ -16,8 +16,8 @@ async def main() -> None:
     reader = ConsoleReader()
 
     load_dotenv()
-    host = os.environ.get("AGENT_HOST", "localhost")
-    healthcare_agent_port = os.environ.get("HEALTHCARE_AGENT_PORT", 9996)
+    host = os.environ.get("AGENT_HOST")
+    healthcare_agent_port = os.environ.get("HEALTHCARE_AGENT_PORT")
     url = f"http://{host}:{healthcare_agent_port}"
 
     agent = A2AAgent(url=url, memory=UnconstrainedMemory())

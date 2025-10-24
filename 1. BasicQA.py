@@ -11,14 +11,18 @@ from anthropic.types import (
 )
 from dotenv import load_dotenv
 
+from helpers import authenticate
+
 
 class PolicyAgent:
 
     def __init__(self):
         load_dotenv()
+        credentials, project_id = authenticate()
         self.client = AnthropicVertex(
-            project_id=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+            project_id=project_id,
             region="global",
+            access_token=credentials.token,
         )
         with Path("./data/2026AnthemgHIPSBC.pdf").open("rb") as file:
             self.pdf_data = base64.standard_b64encode(file.read()).decode("utf-8")

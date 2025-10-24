@@ -18,16 +18,20 @@ from beeai_framework.tools.handoff import HandoffTool
 from beeai_framework.tools.think import ThinkTool
 from dotenv import load_dotenv
 
+from helpers import authenticate
+
 
 def main() -> None:
     print("Running General Healthcare Agent")
 
     load_dotenv()
-    host = os.environ.get("AGENT_HOST", "localhost")
-    policy_port = os.environ.get("POLICY_AGENT_PORT", 9999)
-    research_port = os.environ.get("RESEARCH_AGENT_PORT", 9998)
-    provider_port = os.environ.get("PROVIDER_AGENT_PORT", 9997)
-    healthcare_agent_port = int(os.environ.get("HEALTHCARE_AGENT_PORT", 9996))
+    _, project_id = authenticate()
+
+    host = os.environ.get("AGENT_HOST")
+    policy_port = os.environ.get("POLICY_AGENT_PORT")
+    research_port = os.environ.get("RESEARCH_AGENT_PORT")
+    provider_port = os.environ.get("PROVIDER_AGENT_PORT")
+    healthcare_agent_port = int(os.environ.get("HEALTHCARE_AGENT_PORT"))
 
     print("ℹ️", "Initializing agents and tools")
 
@@ -57,7 +61,7 @@ def main() -> None:
         description="A personal concierge for Healthcare Information, customized to your policy.",
         llm=VertexAIChatModel(
             model_id="gemini-2.5-flash",
-            project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+            project=project_id,
             location="global",
             allow_parallel_tool_calls=True,
         ),

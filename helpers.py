@@ -1,7 +1,10 @@
 import os
 import sys
 
-from google.oauth2.service_account import Credentials
+import google.auth
+import google.auth.credentials
+import google.auth.transport.requests
+from dotenv import load_dotenv
 from rich.console import Console
 from rich.markdown import Markdown
 
@@ -67,7 +70,10 @@ class ConsoleReader:
         return answer.strip()
 
 
-def get_credentials() -> Credentials:
-    return Credentials.from_service_account_file(
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+def authenticate() -> tuple[google.auth.credentials.Credentials, str]:
+    load_dotenv(override=True)
+    credentials, project_id = google.auth.default(
+        scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
+    credentials.refresh(google.auth.transport.requests.Request())
+    return credentials, project_id
