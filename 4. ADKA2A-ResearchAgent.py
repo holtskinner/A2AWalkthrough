@@ -23,7 +23,7 @@ if __name__ == "__main__":
         name="HealthResearchAgent",
         tools=[google_search],
         description="Provides healthcare information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",
-        instruction="You are a healthcare research agent tasked with providing information health conditions. Use the google_search tool to find information on the web about options, symptoms, treatments, and procedures. Cite your sources in your responses. Output all of the information you find.",
+        instruction="You are a healthcare research agent tasked with providing information about health conditions. Use the google_search tool to find information on the web about options, symptoms, treatments, and procedures. Cite your sources in your responses. Output all of the information you find.",
     )
 
     # Make your agent A2A-compatible
