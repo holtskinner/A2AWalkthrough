@@ -51,4 +51,4 @@ class PolicyAgent:
             ],
         )
 
-        return response.content[0].text.replace("$", r"\$")
+        return response.content[0].text.replace("$", r"\\$")

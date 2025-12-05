@@ -38,7 +38,7 @@ class PolicyAgentExecutor(AgentExecutor):
         pass
 
 
-def main():
+def main() -> None:
     PORT = int(os.environ.get("POLICY_AGENT_PORT", 9999))
     HOST = os.environ.get("AGENT_HOST", "localhost")
 

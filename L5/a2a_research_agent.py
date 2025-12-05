@@ -31,7 +31,7 @@ root_agent = LlmAgent(
 )
 
 
-def main():
+def main() -> None:
     # Make your agent A2A-compatible
     a2a_app = to_a2a(root_agent, host=HOST, port=PORT)
     print("Running Health Research Agent")
