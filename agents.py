@@ -1,5 +1,4 @@
 import base64
-import os
 from pathlib import Path
 
 from anthropic import AnthropicVertex
@@ -15,8 +14,7 @@ from helpers import authenticate
 
 
 class PolicyAgent:
-
-    def __init__(self):
+    def __init__(self) -> None:
         load_dotenv()
         credentials, project_id = authenticate()
         self.client = AnthropicVertex(
@@ -24,7 +22,7 @@ class PolicyAgent:
             region="global",
             access_token=credentials.token,
         )
-        with Path("./data/2026AnthemgHIPSBC.pdf").open("rb") as file:
+        with Path("../data/2026AnthemgHIPSBC.pdf").open("rb") as file:
             self.pdf_data = base64.standard_b64encode(file.read()).decode("utf-8")
 
     def answer_query(self, prompt: str) -> str:
@@ -52,13 +50,5 @@ class PolicyAgent:
                 )
             ],
         )
-        return response.content[0].text
 
-
-if __name__ == "__main__":
-    print("Running Health Insurance Policy Agent")
-    agent = PolicyAgent()
-    prompt = "How much would I pay for mental health therapy?"
-
-    response = agent.answer_query(prompt)
-    print(response)
+        return response.content[0].text.replace("$", r"\$")

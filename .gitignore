@@ -1,3 +1,53 @@
+# ignore wandb cache
+**/wandb/*
+**/artifacts/*
+
+# ignore checkpoint files
+**/.ipynb_checkpoints/*
+**/*-checkpoint.ipynb
+**/*-checkpoint.py
+
+# ignore DS_Store files
+**/.DS_Store
+
+# ignore .env file
+.env
+
+# ignore .nbgrader.log
+.nbgrader.log
+
+# ignore pycache files
+**/__pycache__/*
+
+# ignore emacs leftover files
+**/*~
+**/#*#
+
+# ignore untitled notebooks
+**/Untitled.ipynb
+
+# ignore key file
+**/OPENAI_API_KEY.txt
+
+# ignore virtual environment files
+.venv/
+venv/
+.venv*/
+.python-version
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.env
+.coverage
+.mypy_cache
+.pytest_cache
+.ruff_cache
+
 # Python-generated files
 __pycache__/
 *.py[oc]

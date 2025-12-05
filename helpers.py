@@ -1,79 +1,60 @@
 import os
-import sys
 
 import google.auth
 import google.auth.credentials
 import google.auth.transport.requests
 from dotenv import load_dotenv
-from rich.console import Console
-from rich.markdown import Markdown
+from google.auth import impersonated_credentials
+from google.oauth2 import service_account
 
 
-class ConsoleReader:
-
-    def __init__(
-        self,
-        *,
-        fallback: str = "",
-        input_prompt: str = "User 👤 : ",
-        allow_empty: bool = False,
-    ) -> None:
-        self.console = Console()
-        self.fallback = fallback
-        self.input_prompt = input_prompt
-        self.allow_empty = allow_empty
-
-    def __iter__(self) -> "ConsoleReader":
-        self.console.print(
-            "[yellow]Interactive session has started. To escape, input 'q' and submit.[/yellow]"
-        )
-        return self
-
-    def __next__(self) -> str:
-        try:
-            while True:
-                prompt = self.console.input(
-                    f"[bold cyan]{self.input_prompt}[/]"
-                ).strip()
-
-                if not sys.stdin.isatty() and "PYCHARM_HOSTED" not in os.environ:
-                    print(prompt)
-
-                if prompt.lower() == "q":
-                    raise StopIteration
-
-                prompt = prompt if prompt else self.fallback
-
-                if not prompt and not self.allow_empty:
-                    self.console.print(
-                        "[bold red]Error:[/] Empty prompt is not allowed. Please try again."
-                    )
-                    continue
-
-                return prompt
-        except (EOFError, KeyboardInterrupt):
-            self.console.print("\n[bold yellow]Exiting session.[/bold yellow]")
-            raise StopIteration
-
-    def write(self, role: str, data: str) -> None:
-        markdown_content = Markdown(f"**{role}**\n\n---\n{data}")
-        self.console.print(markdown_content)
-        self.console.print()
-
-    def prompt(self) -> str | None:
-        for prompt in self:
-            return prompt
-        exit()
-
-    def ask_single_question(self, query_message: str) -> str:
-        answer = self.console.input(f"[bold cyan]{query_message}[/]")
-        return answer.strip()
-
-
-def authenticate() -> tuple[google.auth.credentials.Credentials, str]:
+def authenticate(
+    location: str | None = None,
+) -> tuple[google.auth.credentials.Credentials, str]:
     load_dotenv(override=True)
-    credentials, project_id = google.auth.default(
-        scopes=["https://www.googleapis.com/auth/cloud-platform"]
+
+    # 1. Locate the JSON key file
+    key_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+
+    # SAFETY CHECK: Ensure the file actually exists
+    if not key_path or not os.path.exists(key_path):
+        # Fallback: Try to look in the current directory if env var is missing
+        if os.path.exists("credentials.json"):
+            key_path = "credentials.json"
+        elif os.path.exists("../credentials.json"):
+            key_path = "../credentials.json"
+        else:
+            raise ValueError(
+                "Could not find credentials.json or GOOGLE_APPLICATION_CREDENTIALS env var."
+            )
+
+    # 2. Load the file EXPLICITLY with scopes
+    source_credentials = service_account.Credentials.from_service_account_file(
+        key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
-    credentials.refresh(google.auth.transport.requests.Request())
-    return credentials, project_id
+
+    # 3. Create the HTTP Request object
+    request = google.auth.transport.requests.Request()
+
+    # 4. Refresh the source credential (The 1-hour token)
+    source_credentials.refresh(request)
+
+    # 5. Create Impersonated Credentials (The 2-hour token)
+    target_principal = source_credentials.service_account_email
+
+    credentials = impersonated_credentials.Credentials(
+        source_credentials=source_credentials,
+        target_principal=target_principal,
+        target_scopes=["https://www.googleapis.com/auth/cloud-platform"],
+        lifetime=7200,  # 2 Hours
+    )
+
+    # 6. Refresh to get the final token
+    credentials.refresh(request)
+
+    # Set Env Vars
+    os.environ["GOOGLE_CLOUD_PROJECT"] = source_credentials.project_id
+    if location:
+        os.environ["GOOGLE_CLOUD_LOCATION"] = location
+
+    return credentials, source_credentials.project_id
