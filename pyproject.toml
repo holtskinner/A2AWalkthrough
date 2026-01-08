@@ -5,8 +5,6 @@ description = "Intro to A2A Protocol"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "google-cloud-aiplatform==1.125.0",
-    "anthropic[vertex]==0.72.0",
     "google-adk[a2a]==1.19.0",
     "a2a-sdk[http-server]==0.3.16",
     "mcp==1.19.0",
@@ -14,9 +12,8 @@ dependencies = [
     "agent-framework-a2a==1.0.0b251120",
     "langchain-mcp-adapters==0.1.11",
     "langgraph==1.0.2",
-    "langchain[openai]==1.0.2",
-    "google-auth==2.42.0",
-    "beeai-framework[a2a,vertexai]==0.1.70",
+    "langchain==1.0.2",
+    "beeai-framework[a2a]==0.1.70",
 ]
 
 [tool.ruff]

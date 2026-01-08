@@ -1,17 +1,13 @@
+import os
+from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_mcp_adapters.sessions import StdioConnection
-from langchain_openai import ChatOpenAI
-
-from helpers import authenticate
-
+from langchain_community.chat_models import ChatLiteLLM
 
 class ProviderAgent:
     def __init__(self) -> None:
-        credentials, project_id = authenticate()
-        location = "us-central1"
-        base_url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/endpoints/openapi"
-
+        load_dotenv()
         self.mcp_client = MultiServerMCPClient(
             {
                 "find_healthcare_providers": StdioConnection(
@@ -21,19 +17,14 @@ class ProviderAgent:
                 )
             }
         )
-
-        self.credentials = credentials
-        self.base_url = base_url
         self.agent = None
 
     async def initialize(self):
         """Initialize the agent asynchronously."""
         tools = await self.mcp_client.get_tools()
         self.agent = create_agent(
-            ChatOpenAI(
-                model="openai/gpt-oss-20b-maas",
-                openai_api_key=self.credentials.token,
-                openai_api_base=self.base_url,
+            ChatLiteLLM(
+                model="gemini/gemini-1.5-flash",
             ),
             tools,
             name="HealthcareProviderAgent",
