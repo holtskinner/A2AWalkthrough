@@ -1,6 +1,7 @@
+from dotenv import load_dotenv
 import os
-
 import uvicorn
+
 from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.events import EventQueue
@@ -12,16 +13,11 @@ from a2a.types import (
     AgentSkill,
 )
 from a2a.utils import new_agent_text_message
-from dotenv import load_dotenv
 
-from agents import PolicyAgent
+from policy_agent import PolicyAgent
 
 
 class PolicyAgentExecutor(AgentExecutor):
-    """This is an agent for questions around policy coverage, it uses a RAG pattern to find answers based on policy documentation. Use it to help answer questions on coverage and waiting periods."""
-
-    _ = load_dotenv()
-
     def __init__(self) -> None:
         self.agent = PolicyAgent()
 
@@ -32,13 +28,19 @@ class PolicyAgentExecutor(AgentExecutor):
     ) -> None:
         prompt = context.get_user_input()
         response = self.agent.answer_query(prompt)
-        await event_queue.enqueue_event(new_agent_text_message(response))
+        message = new_agent_text_message(response)
+        await event_queue.enqueue_event(message)
 
-    async def cancel(self, context: RequestContext, event_queue: EventQueue) -> None:
+    async def cancel(
+        self,
+        context: RequestContext,
+        event_queue: EventQueue,
+    ) -> None:
         pass
 
-
 def main() -> None:
+    print(f"Running A2A Health Insurance Policy Agent")
+    _ = load_dotenv()
     PORT = int(os.environ.get("POLICY_AGENT_PORT", 9999))
     HOST = os.environ.get("AGENT_HOST", "localhost")
 
@@ -54,7 +56,6 @@ def main() -> None:
         name="InsurancePolicyCoverageAgent",
         description="Provides information about insurance policy coverage options and details.",
         url=f"http://{HOST}:{PORT}/",
-        # url=os.environ.get("DLAI_LOCAL_URL").format(port=PORT),
         version="1.0.0",
         default_input_modes=["text"],
         default_output_modes=["text"],
@@ -74,6 +75,7 @@ def main() -> None:
 
     uvicorn.run(server.build(), host=HOST, port=PORT)
 
-
-if __name__ == "__main__":
+    
+if __name__ == '__main__':
     main()
+        
