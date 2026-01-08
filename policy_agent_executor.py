@@ -54,6 +54,7 @@ def main() -> None:
         name="InsurancePolicyCoverageAgent",
         description="Provides information about insurance policy coverage options and details.",
         url=f"http://{HOST}:{PORT}/",
+        # url=os.environ.get("DLAI_LOCAL_URL").format(port=PORT),
         version="1.0.0",
         default_input_modes=["text"],
         default_output_modes=["text"],

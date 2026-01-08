@@ -1,5 +1,4 @@
 # uv pip install -r requirements.txt --system --prerelease=allow
-google-cloud-aiplatform==1.125.0
 anthropic[vertex]==0.72.0
 google-adk[a2a]==1.19.0
 a2a-sdk[http-server]==0.3.16
@@ -10,5 +9,4 @@ langchain-mcp-adapters==0.1.11
 langgraph==1.0.2
 langchain[openai]==1.0.2
 google-auth==2.42.0
-beeai-framework[a2a,vertexai]==0.1.68
-vertexai==1.43.0
+beeai-framework[a2a,vertexai]==0.1.70

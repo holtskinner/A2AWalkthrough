@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 
 from helpers import authenticate
 
-
 class PolicyAgent:
     def __init__(self) -> None:
         load_dotenv()
@@ -29,7 +28,10 @@ class PolicyAgent:
         response = self.client.messages.create(
             model="claude-haiku-4-5@20251001",
             max_tokens=1024,
-            system="You are an expert insurance agent designed to assist with coverage queries. Use the provided documents to answer questions about insurance policies. If the information is not available in the documents, respond with 'I don't know'",
+            system="""You are an expert insurance agent designed to assist 
+            with coverage queries. Use the provided documents to answer 
+            questions about insurance policies. If the information is not 
+            available in the documents, respond with 'I don't know'""",
             messages=[
                 MessageParam(
                     role="user",
@@ -50,5 +52,5 @@ class PolicyAgent:
                 )
             ],
         )
-
+        
         return response.content[0].text.replace("$", r"\\$")
