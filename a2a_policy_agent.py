@@ -1,7 +1,6 @@
-from dotenv import load_dotenv
 import os
-import uvicorn
 
+import uvicorn
 from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.events import EventQueue
@@ -13,6 +12,7 @@ from a2a.types import (
     AgentSkill,
 )
 from a2a.utils import new_agent_text_message
+from dotenv import load_dotenv
 
 from policy_agent import PolicyAgent
 
@@ -38,8 +38,9 @@ class PolicyAgentExecutor(AgentExecutor):
     ) -> None:
         pass
 
+
 def main() -> None:
-    print(f"Running A2A Health Insurance Policy Agent")
+    print("Running A2A Health Insurance Policy Agent")
     _ = load_dotenv()
     PORT = int(os.environ.get("POLICY_AGENT_PORT", 9999))
     HOST = os.environ.get("AGENT_HOST", "localhost")
@@ -75,7 +76,6 @@ def main() -> None:
 
     uvicorn.run(server.build(), host=HOST, port=PORT)
 
-    
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
-        

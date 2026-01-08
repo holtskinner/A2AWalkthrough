@@ -51,14 +51,12 @@ dependencies = [
     { name = "a2a-sdk", extra = ["http-server"] },
     { name = "agent-framework" },
     { name = "agent-framework-a2a" },
-    { name = "anthropic", extra = ["vertex"] },
-    { name = "beeai-framework", extra = ["a2a", "vertexai"] },
+    { name = "beeai-framework", extra = ["a2a"] },
     { name = "google-adk", extra = ["a2a"] },
-    { name = "google-auth" },
-    { name = "google-cloud-aiplatform" },
-    { name = "langchain", extra = ["openai"] },
+    { name = "langchain" },
     { name = "langchain-mcp-adapters" },
     { name = "langgraph" },
+    { name = "litellm" },
     { name = "mcp" },
 ]
 
@@ -67,14 +65,12 @@ requires-dist = [
     { name = "a2a-sdk", extras = ["http-server"], specifier = "==0.3.16" },
     { name = "agent-framework", specifier = "==1.0.0b251120" },
     { name = "agent-framework-a2a", specifier = "==1.0.0b251120" },
-    { name = "anthropic", extras = ["vertex"], specifier = "==0.72.0" },
-    { name = "beeai-framework", extras = ["a2a", "vertexai"], specifier = "==0.1.70" },
+    { name = "beeai-framework", extras = ["a2a"], specifier = "==0.1.70" },
     { name = "google-adk", extras = ["a2a"], specifier = "==1.19.0" },
-    { name = "google-auth", specifier = "==2.42.0" },
-    { name = "google-cloud-aiplatform", specifier = "==1.125.0" },
-    { name = "langchain", extras = ["openai"], specifier = "==1.0.2" },
+    { name = "langchain", specifier = "==1.0.2" },
     { name = "langchain-mcp-adapters", specifier = "==0.1.11" },
     { name = "langgraph", specifier = "==1.0.2" },
+    { name = "litellm" },
     { name = "mcp", specifier = "==1.19.0" },
 ]
 
@@ -433,11 +429,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/7b/b7/160d4fb30080395b4143f1d1a4f6c646ba9105561108d2a434b606c03579/anthropic-0.72.0-py3-none-any.whl", hash = "sha256:0e9f5a7582f038cab8efbb4c959e49ef654a56bfc7ba2da51b5a7b8a84de2e4d", size = 357464, upload-time = "2025-10-28T19:13:00.215Z" },
 ]
 
-[package.optional-dependencies]
-vertex = [
-    { name = "google-auth", extra = ["requests"] },
-]
-
 [[package]]
 name = "anyio"
 version = "4.11.0"
@@ -586,9 +577,6 @@ a2a = [
     { name = "types-grpcio-health-checking" },
     { name = "types-grpcio-reflection" },
     { name = "uvicorn" },
-]
-vertexai = [
-    { name = "google-auth" },
 ]
 
 [[package]]
@@ -1147,11 +1135,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/11/75/28881e9d7de9b3d61939bc9624bd8fa594eb787a00567aba87173c790f09/google_auth-2.42.0.tar.gz", hash = "sha256:9bbbeef3442586effb124d1ca032cfb8fb7acd8754ab79b55facd2b8f3ab2802", size = 295400, upload-time = "2025-10-28T17:38:08.599Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/87/24/ec82aee6ba1a076288818fe5cc5125f4d93fffdc68bb7b381c68286c8aaa/google_auth-2.42.0-py2.py3-none-any.whl", hash = "sha256:f8f944bcb9723339b0ef58a73840f3c61bc91b69bf7368464906120b55804473", size = 222550, upload-time = "2025-10-28T17:38:05.496Z" },
-]
-
-[package.optional-dependencies]
-requests = [
-    { name = "requests" },
 ]
 
 [[package]]
@@ -2238,11 +2221,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/8c/06/0e03587da37173c29a58bf17312793c2453df9ca2912e9adfe869c120437/langchain-1.0.2-py3-none-any.whl", hash = "sha256:e0c5647ea47cde7feb9534f56f4496c7f86a45084ad9bd152e7b19739f210ead", size = 107831, upload-time = "2025-10-21T21:08:25.009Z" },
 ]
 
-[package.optional-dependencies]
-openai = [
-    { name = "langchain-openai" },
-]
-
 [[package]]
 name = "langchain-core"
 version = "1.0.2"
@@ -2273,20 +2251,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ac/4e/b84af2e379edfb51db78edcfc6eab7dca798f2ce9d74b73e29f5f207685c/langchain_mcp_adapters-0.1.11.tar.gz", hash = "sha256:a217c49086b162344749f7f99a148fc12482e2da8e0260b2e35fc93afb31b38d", size = 23061, upload-time = "2025-10-03T14:53:13.98Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1e/cc/5f9b23cce308b2c30246e31712bf1a53ae49d97bab8b3d9bc9cfe364f82c/langchain_mcp_adapters-0.1.11-py3-none-any.whl", hash = "sha256:7b35921e9487bcb3ea3d94bf10341316ac897e2997e8a16032ae514834a9685d", size = 15751, upload-time = "2025-10-03T14:53:12.358Z" },
-]
-
-[[package]]
-name = "langchain-openai"
-version = "1.0.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "langchain-core" },
-    { name = "openai" },
-    { name = "tiktoken" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f1/50/eaa53ac18f63b3e92e6c3a30269714cff477af5a568f486254779a9973f1/langchain_openai-1.0.1.tar.gz", hash = "sha256:78aff09a631fccca08a64f5fc669b325d0f5821490acce024e5da4cf0a08e0d0", size = 1025305, upload-time = "2025-10-21T15:45:06.095Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/62/c0/06d74093e3e798eb464ef76f53d031235b87feccdadbbf6f7b8409043e4d/langchain_openai-1.0.1-py3-none-any.whl", hash = "sha256:9b61309a7268e7c1c614c554cfd66401519e7434aaefc52de7e251887aceb5f7", size = 81898, upload-time = "2025-10-21T15:45:04.957Z" },
 ]
 
 [[package]]
