@@ -5,6 +5,7 @@ description = "Intro to A2A Protocol"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "litellm",
     "google-adk[a2a]==1.19.0",
     "a2a-sdk[http-server]==0.3.16",
     "mcp==1.19.0",
