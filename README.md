@@ -29,3 +29,16 @@ Before running the examples, complete the following setup steps:
     ```
 
     - Replace `"YOUR_GEMINI_API_KEY"` with your actual API Key.
+
+3. **Install Dependencies:**
+    - **Locally:** If you have `uv` installed, run:
+
+      ```sh
+      uv sync
+      ```
+
+    - **Notebooks / Google Colab:** If running in a notebook environment, you can install the dependencies by running the following in a cell:
+
+      ```python
+      %pip install .
+      ```
