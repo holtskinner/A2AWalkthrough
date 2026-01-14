@@ -1,21 +1,13 @@
-import os
-
 import nest_asyncio
-from IPython.display import IFrame, Markdown, display
+from IPython.display import Markdown, display
 from a2a.types import AgentCard
 from dotenv import load_dotenv
 
 
-def setup_env():
+def setup_env() -> None:
     """Initializes the environment by loading .env and applying nest_asyncio."""
     load_dotenv(override=True)
     nest_asyncio.apply()
-
-
-def display_terminal(terminal_id: int, height: int = 600):
-    """Displays a terminal IFrame in the notebook."""
-    url = os.environ.get("DLAI_LOCAL_URL", "http://localhost:8888/").format(port=8888)
-    display(IFrame(f"{url}terminals/{terminal_id}", width=800, height=height))
 
 
 def display_agent_card(agent_card: AgentCard) -> None:

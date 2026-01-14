@@ -44,7 +44,7 @@ class ProviderAgentExecutor(AgentExecutor):
         pass
 
 
-def main():
+def main() -> None:
     print("Running Healthcare Provider Agent")
     load_dotenv()
 
