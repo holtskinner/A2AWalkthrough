@@ -4,7 +4,7 @@ from typing import Any
 
 from beeai_framework.adapters.a2a.agents import A2AAgent
 from beeai_framework.adapters.a2a.serve.server import A2AServer, A2AServerConfig
-from beeai_framework.adapters.langchain.chat_models import LangChainChatModel
+from beeai_framework.adapters.gemini import GeminiChatModel
 from beeai_framework.agents.requirement import RequirementAgent
 from beeai_framework.agents.requirement.requirements.conditional import (
     ConditionalRequirement,
@@ -15,8 +15,8 @@ from beeai_framework.serve.utils import LRUMemoryManager
 from beeai_framework.tools import Tool
 from beeai_framework.tools.handoff import HandoffTool
 from beeai_framework.tools.think import ThinkTool
-from dotenv import load_dotenv
-from langchain_community.chat_models import ChatLiteLLM
+
+from helpers import setup_env
 
 
 # Log only tool calls
@@ -31,7 +31,7 @@ class ConciseGlobalTrajectoryMiddleware(GlobalTrajectoryMiddleware):
 
 def main() -> None:
     print("Running A2A Orchestrator Agent")
-    load_dotenv()
+    setup_env()
 
     host = os.environ.get("AGENT_HOST")
     policy_agent_port = os.environ.get("POLICY_AGENT_PORT")
@@ -64,7 +64,10 @@ def main() -> None:
     healthcare_agent = RequirementAgent(
         name="Healthcare Agent",
         description="A personal concierge for Healthcare Information, customized to your policy.",
-        llm=LangChainChatModel(ChatLiteLLM(model="gemini/gemini-3-flash-preview")),
+        llm=GeminiChatModel(
+            "gemini-3-flash-preview",
+            allow_parallel_tool_calls=True,
+        ),
         tools=[
             thinktool := ThinkTool(),
             policy_tool := HandoffTool(
@@ -84,9 +87,21 @@ def main() -> None:
             ),
         ],
         requirements=[
-            ConditionalRequirement(policy_tool, consecutive_allowed=False),
             ConditionalRequirement(
-                thinktool, force_at_step=1, force_after=Tool, consecutive_allowed=False
+                policy_tool,
+                consecutive_allowed=False,
+                max_invocations=1,
+            ),
+            ConditionalRequirement(
+                research_tool,
+                consecutive_allowed=False,
+                max_invocations=1,
+                min_invocations=1,
+            ),
+            ConditionalRequirement(
+                provider_tool,
+                consecutive_allowed=False,
+                max_invocations=1,
             ),
         ],
         role="Healthcare Concierge",

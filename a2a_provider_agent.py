@@ -12,8 +12,8 @@ from a2a.types import (
     AgentSkill,
 )
 from a2a.utils import new_agent_text_message
-from dotenv import load_dotenv
 
+from helpers import setup_env
 from provider_agent import ProviderAgent
 
 
@@ -46,7 +46,7 @@ class ProviderAgentExecutor(AgentExecutor):
 
 def main() -> None:
     print("Running Healthcare Provider Agent")
-    load_dotenv()
+    setup_env()
 
     HOST = os.environ.get("AGENT_HOST", "localhost")
     PORT = int(os.environ.get("PROVIDER_AGENT_PORT", 9997))

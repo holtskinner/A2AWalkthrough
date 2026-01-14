@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from langchain.agents import create_agent
-from langchain_community.chat_models import ChatLiteLLM
+from langchain_litellm import ChatLiteLLM
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_mcp_adapters.sessions import StdioConnection
 
@@ -25,10 +25,11 @@ class ProviderAgent:
         self.agent = create_agent(
             ChatLiteLLM(
                 model="gemini/gemini-3-flash-preview",
+                max_tokens=1000,
             ),
             tools,
             name="HealthcareProviderAgent",
-            system_prompt="Your task is to find and list providers using the find_healthcare_providers MCP Tool based on the users query. Only use providers based on the response from the tool. Output the information in a table.",
+            system_prompt="Your task is to find and list providers using the find_healthcare_providers MCP Tool based on the users query.",
         )
         return self
 

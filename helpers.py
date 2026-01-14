@@ -1,3 +1,6 @@
+import logging
+import warnings
+
 import nest_asyncio
 from IPython.display import Markdown, display
 from a2a.types import AgentCard
@@ -8,6 +11,10 @@ def setup_env() -> None:
     """Initializes the environment by loading .env and applying nest_asyncio."""
     load_dotenv(override=True)
     nest_asyncio.apply()
+
+    logging.disable(level=logging.WARNING)
+    warnings.filterwarnings("ignore", category=UserWarning)
+    warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 def display_agent_card(agent_card: AgentCard) -> None:
