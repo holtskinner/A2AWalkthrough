@@ -24,7 +24,7 @@ class ProviderAgent:
         tools = await self.mcp_client.get_tools()
         self.agent = create_agent(
             ChatLiteLLM(
-                model="gemini/gemini-1.5-flash",
+                model="gemini/gemini-3-flash-preview",
             ),
             tools,
             name="HealthcareProviderAgent",

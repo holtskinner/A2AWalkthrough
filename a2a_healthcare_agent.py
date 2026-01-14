@@ -64,7 +64,7 @@ def main() -> None:
     healthcare_agent = RequirementAgent(
         name="Healthcare Agent",
         description="A personal concierge for Healthcare Information, customized to your policy.",
-        llm=LangChainChatModel(ChatLiteLLM(model="gemini/gemini-1.5-flash")),
+        llm=LangChainChatModel(ChatLiteLLM(model="gemini/gemini-3-flash-preview")),
         tools=[
             thinktool := ThinkTool(),
             policy_tool := HandoffTool(
