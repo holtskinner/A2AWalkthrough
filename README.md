@@ -1,12 +1,11 @@
 # Intro to A2A Protocol
 
-1. Basic Question Answering Agent about Insurance Policies with Claude Model as a Service on Vertex AI (No Agent Framework)
+1. Basic Question Answering Agent about Insurance Policies with No Agent Framework
 2. [Insurance Policy Agent] Turn QA Agent into A2A Agent Server with A2A SDK (No Framework to show how the SDK works.)
 3. Basic A2A Client with A2A SDK to show communication (No Framework to show how SDK works)
 4. [Health Research Agent] ADK Agent using Gemini with Google Search tool to answer Health-based Questions. Using [ADK A2A exposing](https://google.github.io/adk-docs/a2a/quickstart-exposing/).
 5. [Sequential Agent] ADK `SequentialAgent` connecting to Policy Agent and Health Agent in sequence. Using [ADK A2A consuming](https://google.github.io/adk-docs/a2a/quickstart-consuming/).
-6. [Healthcare Provider Agent] A2A Agent calling an MCP Server, built with LangGraph and OpenAI OSS on Vertex AI.
-    - [Built-in LangGraph support](https://docs.langchain.com/langsmith/server-a2a) seems to require using LangGraph platform/dev server, which might not work for this example.
+6. [Healthcare Provider Agent] A2A Agent calling an MCP Server, built with LangChain/LangGraph.
 7. A2A Client with [Microsoft Agent Framework built-in Client](https://learn.microsoft.com/en-us/agent-framework/user-guide/agents/agent-types/a2a-agent?pivots=programming-language-python)
 8. [Healthcare Concierge Agent] Full General Healthcare Agent built with [BeeAI Requirements Agent](https://framework.beeai.dev/experimental/requirement-agent) to call all of the A2A Agents in an Agentic way.
     - Using [BeeAI Built-in A2A Support](https://framework.beeai.dev/integrations/a2a)
@@ -19,13 +18,8 @@ Follow these steps to set up your environment and run the example agents. Each n
 
 Before running the examples, complete the following setup steps:
 
-1. **Authenticate with Google Cloud:**
-    - Create or select a Google Cloud Project.
-    - Enable the Vertex AI API in your project.
-    - Enable the Model Garden models used in the modules
-      - [Claude 4.5 Haiku](https://console.cloud.google.com/vertex-ai/publishers/anthropic/model-garden/claude-haiku-4-5)
-      - [GPT OSS 120b](https://console.cloud.google.com/vertex-ai/publishers/openai/model-garden/gpt-oss-120b-maas)
-    - Set up your local application-default credentials by running `gcloud auth application-default login`.
+1. **Create a [Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key)**
+    - https://aistudio.google.com/app/api-keys
 
 2. **Configure Environment Variables:**
     - In the project root, make a copy of `example.env` and rename it to `.env`.
@@ -33,3 +27,5 @@ Before running the examples, complete the following setup steps:
     ```sh
     cp example.env .env
     ```
+
+    - Replace `"YOUR_GEMINI_API_KEY"` with your actual API Key.
