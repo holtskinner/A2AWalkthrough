@@ -43,3 +43,31 @@ Before running the examples, complete the following setup steps:
       ```python
       %pip install .
       ```
+
+## Running the Agents
+
+You can run the agent servers using `uv run`. Ensure you are in the project root.
+
+- **Policy Agent (Lesson 2):**
+
+  ```sh
+  uv run a2a_policy_agent.py
+  ```
+
+- **Research Agent (Lesson 4):**
+
+  ```sh
+  uv run a2a_research_agent.py
+  ```
+
+- **Provider Agent (Lesson 6):**
+
+  ```sh
+  uv run a2a_provider_agent.py
+  ```
+
+- **Healthcare Concierge Agent (Lesson 8):**
+
+  ```sh
+  uv run a2a_healthcare_agent.py
+  ```
