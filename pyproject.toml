@@ -18,6 +18,7 @@ dependencies = [
     "beeai-framework[a2a]==0.1.75",
     "nest_asyncio",
     "ipython",
+    "langgraph-a2a-server>=0.1.6",
 ]
 
 [tool.ruff]

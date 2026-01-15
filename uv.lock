@@ -58,6 +58,7 @@ dependencies = [
     { name = "langchain-litellm" },
     { name = "langchain-mcp-adapters" },
     { name = "langgraph" },
+    { name = "langgraph-a2a-server" },
     { name = "litellm" },
     { name = "mcp" },
     { name = "nest-asyncio" },
@@ -75,6 +76,7 @@ requires-dist = [
     { name = "langchain-litellm" },
     { name = "langchain-mcp-adapters", specifier = "==0.1.11" },
     { name = "langgraph", specifier = "==1.0.2" },
+    { name = "langgraph-a2a-server", specifier = ">=0.1.6" },
     { name = "litellm", specifier = "==1.80.16" },
     { name = "mcp", specifier = "==1.19.0" },
     { name = "nest-asyncio" },
@@ -2365,6 +2367,22 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/0e/25/18e6e056ee1a8af64fcab441b4a3f2e158399935b08f148c7718fc42ecdb/langgraph-1.0.2.tar.gz", hash = "sha256:dae1af08d6025cb1fcaed68f502c01af7d634d9044787c853a46c791cfc52f67", size = 482660, upload-time = "2025-10-29T18:38:28.374Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d7/b1/9f4912e13d4ed691f2685c8a4b764b5a9237a30cca0c5782bc213d9f0a9a/langgraph-1.0.2-py3-none-any.whl", hash = "sha256:b3d56b8c01de857b5fb1da107e8eab6e30512a377685eeedb4f76456724c9729", size = 156751, upload-time = "2025-10-29T18:38:26.577Z" },
+]
+
+[[package]]
+name = "langgraph-a2a-server"
+version = "0.1.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "a2a-sdk", extra = ["http-server"] },
+    { name = "fastapi" },
+    { name = "langgraph" },
+    { name = "starlette" },
+    { name = "uvicorn" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e9/f2/86c30ccdaedc41c941b9c34562ec4cba07f14a7e31a7ffa80f1f3842d7e1/langgraph_a2a_server-0.1.6.tar.gz", hash = "sha256:d66c40036666e3b44df6025699f96a4ca05dbb4be4ddce2085391c3747b62d8b", size = 93868, upload-time = "2025-10-08T16:35:03.619Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/46/1e/424cd8e1535d239262033429a78d6408ebd35c291740ee416a02a47231aa/langgraph_a2a_server-0.1.6-py3-none-any.whl", hash = "sha256:3accaa1ecc42049aabfe6b6c0cf4b3b292302861ddc2415ef70f2b7faea19146", size = 9075, upload-time = "2025-10-08T16:35:01.749Z" },
 ]
 
 [[package]]
