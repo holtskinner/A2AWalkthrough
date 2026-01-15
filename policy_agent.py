@@ -2,12 +2,13 @@ import base64
 from pathlib import Path
 
 import litellm
-from dotenv import load_dotenv
+
+from helpers import setup_env
 
 
 class PolicyAgent:
     def __init__(self) -> None:
-        load_dotenv()
+        setup_env()
         with Path("data/2026AnthemgHIPSBC.pdf").open("rb") as file:
             self.pdf_data = base64.standard_b64encode(file.read()).decode("utf-8")
 

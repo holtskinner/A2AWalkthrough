@@ -12,8 +12,8 @@ from a2a.types import (
     AgentSkill,
 )
 from a2a.utils import new_agent_text_message
-from dotenv import load_dotenv
 
+from helpers import setup_env
 from policy_agent import PolicyAgent
 
 
@@ -41,7 +41,7 @@ class PolicyAgentExecutor(AgentExecutor):
 
 def main() -> None:
     print("Running A2A Health Insurance Policy Agent")
-    _ = load_dotenv()
+    setup_env()
     PORT = int(os.getenv("POLICY_AGENT_PORT", 9999))
     HOST = os.getenv("AGENT_HOST", "localhost")
 
