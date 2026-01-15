@@ -33,11 +33,11 @@ def main() -> None:
     print("Running A2A Orchestrator Agent")
     setup_env()
 
-    host = os.environ.get("AGENT_HOST")
-    policy_agent_port = os.environ.get("POLICY_AGENT_PORT")
-    research_agent_port = os.environ.get("RESEARCH_AGENT_PORT")
-    provider_agent_port = os.environ.get("PROVIDER_AGENT_PORT")
-    healthcare_agent_port = int(os.environ.get("HEALTHCARE_AGENT_PORT"))
+    host = os.getenv("AGENT_HOST")
+    policy_agent_port = os.getenv("POLICY_AGENT_PORT")
+    research_agent_port = os.getenv("RESEARCH_AGENT_PORT")
+    provider_agent_port = os.getenv("PROVIDER_AGENT_PORT")
+    healthcare_agent_port = int(os.getenv("HEALTHCARE_AGENT_PORT"))
 
     # Log only tool calls
     GlobalTrajectoryMiddleware(target=[Tool])

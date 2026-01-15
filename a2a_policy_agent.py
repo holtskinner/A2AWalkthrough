@@ -42,8 +42,8 @@ class PolicyAgentExecutor(AgentExecutor):
 def main() -> None:
     print("Running A2A Health Insurance Policy Agent")
     _ = load_dotenv()
-    PORT = int(os.environ.get("POLICY_AGENT_PORT", 9999))
-    HOST = os.environ.get("AGENT_HOST", "localhost")
+    PORT = int(os.getenv("POLICY_AGENT_PORT", 9999))
+    HOST = os.getenv("AGENT_HOST", "localhost")
 
     skill = AgentSkill(
         id="insurance_coverage",

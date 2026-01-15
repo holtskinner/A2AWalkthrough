@@ -9,8 +9,8 @@ from helpers import setup_env
 
 setup_env()
 
-PORT = int(os.environ.get("RESEARCH_AGENT_PORT"))
-HOST = os.environ.get("AGENT_HOST")
+PORT = int(os.getenv("RESEARCH_AGENT_PORT"))
+HOST = os.getenv("AGENT_HOST")
 
 
 def main() -> None:
