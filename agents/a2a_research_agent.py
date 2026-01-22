@@ -5,7 +5,7 @@ from google.adk.a2a.utils.agent_to_a2a import to_a2a
 from google.adk.agents.llm_agent import LlmAgent
 from google.adk.tools import google_search
 
-from helpers import setup_env
+from agents.helpers import setup_env
 
 setup_env()
 

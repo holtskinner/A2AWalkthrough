@@ -3,7 +3,7 @@ from pathlib import Path
 
 import litellm
 
-from helpers import setup_env
+from agents.helpers import setup_env
 
 
 class PolicyAgent:

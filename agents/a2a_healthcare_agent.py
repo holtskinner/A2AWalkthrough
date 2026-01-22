@@ -16,7 +16,7 @@ from beeai_framework.tools import Tool
 from beeai_framework.tools.handoff import HandoffTool
 from beeai_framework.tools.think import ThinkTool
 
-from helpers import setup_env
+from agents.helpers import setup_env
 
 
 # Log only tool calls

@@ -13,8 +13,8 @@ from a2a.types import (
 )
 from a2a.utils import new_agent_text_message
 
-from helpers import setup_env
-from policy_agent import PolicyAgent
+from agents.helpers import setup_env
+from agents.policy_agent import PolicyAgent
 
 
 class PolicyAgentExecutor(AgentExecutor):

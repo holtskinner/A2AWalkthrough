@@ -21,6 +21,9 @@ dependencies = [
     "langgraph-a2a-server>=0.1.6",
 ]
 
+[tool.setuptools]
+packages = ["agents"]
+
 [tool.ruff]
 line-length = 88
 indent-width = 4 # Google Style Guide §3.4: 4 spaces

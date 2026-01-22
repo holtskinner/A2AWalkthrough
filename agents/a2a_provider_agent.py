@@ -13,7 +13,7 @@ from langchain_mcp_adapters.sessions import StdioConnection
 from langgraph.graph.state import CompiledStateGraph
 from langgraph_a2a_server import A2AServer
 
-from helpers import setup_env
+from agents.helpers import setup_env
 
 
 def main() -> None:

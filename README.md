@@ -17,31 +17,45 @@ Follow these steps to set up your environment and run the example agents. Each n
 
 ### 1. Initial Setup
 
-Before running the examples, complete the following setup steps:
+This project uses `uv` to manage dependencies and Python versions automatically. This ensures that you have the correct Python version (3.12+) and all required libraries without affecting your system Python.
 
-1. **Create a [Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key)**
-    - https://aistudio.google.com/app/api-keys
+1.  **Install `uv`** (if you haven't already):
+    - **macOS/Linux:**
 
-2. **Configure Environment Variables:**
-    - In the project root, make a copy of `example.env` and rename it to `.env`.
+      ```sh
+      curl -LsSf https://astral.sh/uv/install.sh | sh
+      ```
 
-    ```sh
-    cp example.env .env
-    ```
+    - **Windows:**
 
-    - Replace `"YOUR_GEMINI_API_KEY"` with your actual API Key.
+      ```powershell
+      powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+      ```
 
-3. **Install Dependencies:**
-    - **Locally:** If you have `uv` installed, run:
+2.  **Sync the Project:**
+    - Run this command in the project root to install the correct Python version and libraries into a local virtual environment (`.venv`):
 
       ```sh
       uv sync
       ```
 
-    - **Notebooks / Google Colab:** If running in a notebook environment, you can install the dependencies by running the following in a cell:
+3.  **Configure Environment Variables:**
+    - In the project root, make a copy of `example.env` and rename it to `.env`.
 
-      ```python
-      %pip install .
+    ```sh
+    cp example.env .env
+    ```
+    - Replace `"YOUR_GEMINI_API_KEY"` with your actual [Gemini API Key](https://aistudio.google.com/app/api-keys).
+
+4.  **Launch the Notebooks:**
+    - To ensure the notebooks use the `uv` environment, launch your editor or Jupyter through `uv run`:
+
+      ```sh
+      # For VS Code
+      uv run code .
+
+      # For Jupyter Lab
+      uv run jupyter lab
       ```
 
 ## Running the Agents
@@ -51,23 +65,23 @@ You can run the agent servers using `uv run`. Ensure you are in the project root
 - **Policy Agent (Lesson 2):**
 
   ```sh
-  uv run a2a_policy_agent.py
+  uv run agents/a2a_policy_agent.py
   ```
 
 - **Research Agent (Lesson 4):**
 
   ```sh
-  uv run a2a_research_agent.py
+  uv run agents/a2a_research_agent.py
   ```
 
 - **Provider Agent (Lesson 6):**
 
   ```sh
-  uv run a2a_provider_agent.py
+  uv run agents/a2a_provider_agent.py
   ```
 
 - **Healthcare Concierge Agent (Lesson 8):**
 
   ```sh
-  uv run a2a_healthcare_agent.py
+  uv run agents/a2a_healthcare_agent.py
   ```
