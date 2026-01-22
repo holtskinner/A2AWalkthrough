@@ -19,8 +19,7 @@ Follow these steps to set up your environment and run the example agents. Each n
 
 Before running the examples, complete the following setup steps:
 
-1. **Create a [Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key)**
-    - https://aistudio.google.com/app/api-keys
+1. **Create a [Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key) or [configure your environment for Vertex AI](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/start/quickstart?usertype=adc).**
 
 2. **Configure Environment Variables:**
     - In the project root, make a copy of `example.env` and rename it to `.env`.
