@@ -11,6 +11,66 @@
 8. [Healthcare Concierge Agent] Full General Healthcare Agent built with [BeeAI Requirements Agent](https://framework.beeai.dev/experimental/requirement-agent) to call all of the A2A Agents in an Agentic way.
     - Using [BeeAI Built-in A2A Support](https://framework.beeai.dev/integrations/a2a)
 
+## Architecture Diagram
+
+```mermaid
+graph LR
+    %% User / Client Layer
+    User([User / A2A Client])
+    
+    %% Main Orchestrator Layer (Lesson 8)
+    subgraph OrchestratorLayer [Router/Requirement Agent]
+        Concierge["<b>Healthcare Concierge Agent</b><br/>(BeeAI Framework)<br/><code>Port: 9996</code>"]
+    end
+
+    subgraph SubAgents [A2A Agent Servers]
+        direction TB
+
+        PolicyAgent["<b>Policy Agent</b><br/>(Gemini with A2A SDK)<br/><code>Port: 9999</code>"]
+        ResearchAgent["<b>Research Agent</b><br/>(Google ADK)<br/><code>Port: 9998</code>"]
+
+        ProviderAgent["<b>Provider Agent</b><br/>(LangGraph + LangChain)<br/><code>Port: 9997</code>"]
+    end
+
+    %% Data & Tools Layer
+    subgraph DataLayer [Data Sources & Tools]
+        PDF["Policy PDF"]
+        Google[Google Search Tool]
+        MCPServer["FastMCP Server<br/>(<code>doctors.json</code>)"]
+    end
+    
+    Label_UA["Sends Query - A2A"]
+    Label_CP["A2A"]
+    Label_CR["A2A"]
+    Label_CProv["A2A"]
+    Label_MCP["MCP (stdio)"]
+
+    %% -- CONNECTIONS --
+    
+    User --- Label_UA --> Concierge
+
+    Concierge --- Label_CP --> PolicyAgent
+    Concierge --- Label_CR --> ResearchAgent
+    Concierge --- Label_CProv --> ProviderAgent
+    
+    PolicyAgent -- "Reads" --> PDF
+    ResearchAgent -- "Calls" --> Google
+    
+    ProviderAgent --- Label_MCP --> MCPServer
+
+    classDef orchestrator fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef agent fill:#e1f5fe,stroke:#0277bd,stroke-width:2px;
+    classDef tool fill:#fff3e0,stroke:#ef6c00,stroke-width:1px,stroke-dasharray: 5 5;
+    
+    classDef protocolLabel fill:#ffffff,stroke:none,color:#000;
+    
+    class Concierge orchestrator;
+    class PolicyAgent,ResearchAgent,ProviderAgent agent;
+    class PDF,Google,MCPServer tool;
+    
+    class Label_UA,Label_CP,Label_CR,Label_CProv,Label_MCP protocolLabel;
+```
+
 ## How to Run
 
 Follow these steps to set up your environment and run the example agents. Each numbered module (`1. ...`, `2. ...`, etc.) is designed to be run in sequence.
