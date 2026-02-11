@@ -1,4 +1,3 @@
-import logging
 import warnings
 
 import nest_asyncio
@@ -12,9 +11,8 @@ def setup_env() -> None:
     load_dotenv(override=True)
     nest_asyncio.apply()
 
-    # logging.disable(level=logging.WARNING)
-    # warnings.filterwarnings("ignore", category=UserWarning)
-    # warnings.filterwarnings("ignore", category=FutureWarning)
+    warnings.filterwarnings("ignore", category=UserWarning)
+    warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 def display_agent_card(agent_card: AgentCard) -> None:
