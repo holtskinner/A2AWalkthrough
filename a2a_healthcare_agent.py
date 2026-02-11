@@ -70,12 +70,12 @@ def main() -> None:
             allow_parallel_tool_calls=True,
         ),
         # If using Vertex AI
-        #llm = VertexAIChatModel(
+        # llm = VertexAIChatModel(
         #    model_id="gemini-3-flash-preview",
         #    project= os.environ.get("GOOGLE_CLOUD_PROJECT"),
         #    location="global",
         #    allow_parallel_tool_calls=True,
-        #),
+        # ),
         tools=[
             thinktool := ThinkTool(),
             policy_tool := HandoffTool(
