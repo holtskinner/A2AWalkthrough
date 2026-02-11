@@ -5,6 +5,7 @@ from typing import Any
 from beeai_framework.adapters.a2a.agents import A2AAgent
 from beeai_framework.adapters.a2a.serve.server import A2AServer, A2AServerConfig
 from beeai_framework.adapters.gemini import GeminiChatModel
+from beeai_framework.adapters.vertexai import VertexAIChatModel  # noqa: F401
 from beeai_framework.agents.requirement import RequirementAgent
 from beeai_framework.agents.requirement.requirements.conditional import (
     ConditionalRequirement,
@@ -66,10 +67,15 @@ def main() -> None:
         description="A personal concierge for Healthcare Information, customized to your policy.",
         llm=GeminiChatModel(
             "gemini-3-flash-preview",
-            # For Vertex AI:
-            # "vertex_ai/gemini-3-flash-preview",
             allow_parallel_tool_calls=True,
         ),
+        # If using Vertex AI
+        # llm = VertexAIChatModel(
+        #    model_id="gemini-3-flash-preview",
+        #    project= os.environ.get("GOOGLE_CLOUD_PROJECT"),
+        #    location="global",
+        #    allow_parallel_tool_calls=True,
+        # ),
         tools=[
             thinktool := ThinkTool(),
             policy_tool := HandoffTool(

@@ -12,13 +12,14 @@ dependencies = [
     "agent-framework==1.0.0b251120",
     "agent-framework-a2a==1.0.0b251120",
     "langchain-mcp-adapters==0.1.11",
-    "langchain-litellm",
     "langgraph==1.0.2",
     "langchain==1.0.2",
-    "beeai-framework[a2a]==0.1.75",
+    "langchain_litellm",
+    "beeai-framework[a2a]==0.1.70",
     "nest_asyncio",
     "ipython",
-    "langgraph-a2a-server>=0.1.6",
+    "python-dotenv",
+    "langgraph-a2a-server==0.1.6",
 ]
 
 [tool.ruff]

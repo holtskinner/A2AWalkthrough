@@ -79,7 +79,7 @@ Follow these steps to set up your environment and run the example agents. Each n
 
 Before running the examples, complete the following setup steps:
 
-1. **Create a [Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key) or [configure your environment for Vertex AI](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/start/quickstart?usertype=adc).**
+1. **Create a [Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key) or [configure your environment for Vertex AI](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/start/quickstart?usertype=adc).** If you choose to use Vertex AI, make sure to uncomment the corresponding code in the notebooks and Python files.
 
 2. **Configure Environment Variables:**
     - In the project root, make a copy of `example.env` and rename it to `.env`.
@@ -97,7 +97,7 @@ Before running the examples, complete the following setup steps:
       uv sync
       ```
 
-    - **Notebooks / Google Colab:** If running in a notebook environment, you can install the dependencies by running the following in a cell:
+    - **Notebooks / Google Colab:** If running in a notebook environment, you can install the dependencies by running the following in a cell (or in the terminal):
 
       ```python
       %pip install .
@@ -105,7 +105,7 @@ Before running the examples, complete the following setup steps:
 
 ## Running the Agents
 
-You can run the agent servers using `uv run`. Ensure you are in the project root.
+You can run each agent server in a separate terminal using `uv run`. Ensure you are in the project root.
 
 - **Policy Agent (Lesson 2):**
 
@@ -130,3 +130,11 @@ You can run the agent servers using `uv run`. Ensure you are in the project root
   ```sh
   uv run a2a_healthcare_agent.py
   ```
+
+To interact with these A2A agent servers, you can run the A2A clients defined in the provided notebooks or create Python files defining A2A clients to run in a terminal. For example, run:
+
+```sh
+uv run a2a_healthcare_client.py
+```
+
+to interact with the Healthcare Concierge Agent.
