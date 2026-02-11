@@ -5,7 +5,7 @@ from typing import Any
 from beeai_framework.adapters.a2a.agents import A2AAgent
 from beeai_framework.adapters.a2a.serve.server import A2AServer, A2AServerConfig
 from beeai_framework.adapters.gemini import GeminiChatModel
-from beeai_framework.adapters.vertexai import VertexAIChatModel
+from beeai_framework.adapters.vertexai import VertexAIChatModel  # noqa: F401
 from beeai_framework.agents.requirement import RequirementAgent
 from beeai_framework.agents.requirement.requirements.conditional import (
     ConditionalRequirement,
