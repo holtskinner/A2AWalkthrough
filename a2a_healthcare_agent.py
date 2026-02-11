@@ -96,6 +96,12 @@ def main() -> None:
         ],
         requirements=[
             ConditionalRequirement(
+                thinktool,
+                force_at_step=1,
+                force_after=Tool,
+                consecutive_allowed=False,
+            ),
+            ConditionalRequirement(
                 policy_tool,
                 consecutive_allowed=False,
                 max_invocations=1,
@@ -104,7 +110,6 @@ def main() -> None:
                 research_tool,
                 consecutive_allowed=False,
                 max_invocations=1,
-                min_invocations=1,
             ),
             ConditionalRequirement(
                 provider_tool,
