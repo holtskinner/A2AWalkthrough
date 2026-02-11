@@ -62,6 +62,7 @@ dependencies = [
     { name = "litellm" },
     { name = "mcp" },
     { name = "nest-asyncio" },
+    { name = "python-dotenv" },
 ]
 
 [package.metadata]
@@ -69,17 +70,18 @@ requires-dist = [
     { name = "a2a-sdk", extras = ["http-server"], specifier = "==0.3.16" },
     { name = "agent-framework", specifier = "==1.0.0b251120" },
     { name = "agent-framework-a2a", specifier = "==1.0.0b251120" },
-    { name = "beeai-framework", extras = ["a2a"], specifier = "==0.1.75" },
+    { name = "beeai-framework", extras = ["a2a"], specifier = "==0.1.70" },
     { name = "google-adk", extras = ["a2a"], specifier = "==1.19.0" },
     { name = "ipython" },
     { name = "langchain", specifier = "==1.0.2" },
     { name = "langchain-litellm" },
     { name = "langchain-mcp-adapters", specifier = "==0.1.11" },
     { name = "langgraph", specifier = "==1.0.2" },
-    { name = "langgraph-a2a-server", specifier = ">=0.1.6" },
+    { name = "langgraph-a2a-server", specifier = "==0.1.6" },
     { name = "litellm", specifier = "==1.80.16" },
     { name = "mcp", specifier = "==1.19.0" },
     { name = "nest-asyncio" },
+    { name = "python-dotenv" },
 ]
 
 [[package]]
@@ -566,7 +568,7 @@ wheels = [
 
 [[package]]
 name = "beeai-framework"
-version = "0.1.75"
+version = "0.1.70"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -580,9 +582,9 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/49/59/42693afbd87dd692a2fb353a47941b8c773df7174fc1ff44e273d3af6162/beeai_framework-0.1.75.tar.gz", hash = "sha256:b8e0a6709088539b0683636f6b0c418a8ed77e14cbb7648c3b01db8227ac85a9", size = 189965, upload-time = "2026-01-08T15:25:37.286Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/27/a26b1a55444de2271325d5471ba09e8a5f8c40bee25bf0f891eff52942ab/beeai_framework-0.1.70.tar.gz", hash = "sha256:7fe1b4f22015f8ea3ceffdbbaf1bba4ed390065d23c17aa3d406e25302ea24eb", size = 184126, upload-time = "2025-11-26T11:47:07.117Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/25/00/dedb7e5037dc7022f711cded4ddf297150231b6d294ec489f2d8c5f7f378/beeai_framework-0.1.75-py3-none-any.whl", hash = "sha256:e1930465e3650a3da4ab086053338b3b996712bdc2831c0fc3e39ca0b369b76f", size = 348832, upload-time = "2026-01-08T15:25:35.597Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/50/fb1172b5c1625832b6589a1c6150197940b73c9aaeadfda4d7fef2067763/beeai_framework-0.1.70-py3-none-any.whl", hash = "sha256:a0e9350cc9a8360f2b8f2251ac96bcc41511ed24ac6f27bc7fb6c3e5dbc260e2", size = 340421, upload-time = "2025-11-26T11:47:05.498Z" },
 ]
 
 [package.optional-dependencies]
