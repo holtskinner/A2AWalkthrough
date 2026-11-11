@@ -19,7 +19,6 @@ from beeai_framework.tools.think import ThinkTool
 
 from helpers import setup_env
 
-
 # Log only tool calls
 class ConciseGlobalTrajectoryMiddleware(GlobalTrajectoryMiddleware):
     def _format_prefix(self, meta: EventMeta) -> str:
@@ -66,12 +65,12 @@ def main() -> None:
         name="Healthcare Agent",
         description="A personal concierge for Healthcare Information, customized to your policy.",
         llm=GeminiChatModel(
-            "gemini-2.5-flash",
+            "gemini-3.8-flash",
             allow_parallel_tool_calls=True,
         ),
         # If using Vertex AI
         # llm = VertexAIChatModel(
-        #    model_id="gemini-2.5-flash",
+        #    model_id="gemini-3.8-flash",
         #    project= os.environ.get("GOOGLE_CLOUD_PROJECT"),
         #    location="global",
         #    allow_parallel_tool_calls=True,

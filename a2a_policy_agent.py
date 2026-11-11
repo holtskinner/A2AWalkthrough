@@ -16,7 +16,6 @@ from a2a.utils import new_agent_text_message
 from helpers import setup_env
 from policy_agent import PolicyAgent
 
-
 class PolicyAgentExecutor(AgentExecutor):
     def __init__(self) -> None:
         self.agent = PolicyAgent()

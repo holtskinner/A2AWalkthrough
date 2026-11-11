@@ -8,7 +8,6 @@ from beeai_framework.middleware.trajectory import EventMeta, GlobalTrajectoryMid
 
 from helpers import setup_env
 
-
 class ConciseGlobalTrajectoryMiddleware(GlobalTrajectoryMiddleware):
     def _format_prefix(self, meta: EventMeta) -> str:
         prefix = super()._format_prefix(meta)

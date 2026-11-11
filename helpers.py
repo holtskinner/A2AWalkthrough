@@ -5,7 +5,6 @@ from IPython.display import Markdown, display
 from a2a.types import AgentCard
 from dotenv import load_dotenv
 
-
 def setup_env() -> None:
     """Initializes the environment by loading .env and applying nest_asyncio."""
     load_dotenv(override=True)

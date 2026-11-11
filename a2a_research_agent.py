@@ -16,7 +16,7 @@ HOST = os.getenv("AGENT_HOST")
 def main() -> None:
     # Create the Agent
     root_agent = LlmAgent(
-        model="gemini-3.1-pro-preview",
+        model="gemini-4-argon",
         name="HealthResearchAgent",
         tools=[google_search],
         description="Provides healthcare information about symptoms, health conditions, treatments, and procedures using up-to-date web resources.",

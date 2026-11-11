@@ -37,9 +37,9 @@ def main() -> None:
     )
     agent: CompiledStateGraph = create_agent(
         model=ChatLiteLLM(
-            model="gemini/gemini-3.1-flash-lite-preview",
+            model="gemini/gemini-3.5-flash-lite",
             # For Vertex AI:
-            # model="vertex_ai/gemini-3.1-flash-lite-preview",
+            # model="vertex_ai/gemini-3.5-flash-lite",
             max_tokens=1000,
         ),
         tools=asyncio.run(mcp_client.get_tools()),
